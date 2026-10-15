@@ -10,6 +10,7 @@ class SternburgBingoApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: 'Sternburg Bingo',
     theme: AppTheme.lightTheme,
     darkTheme: AppTheme.darkTheme,
