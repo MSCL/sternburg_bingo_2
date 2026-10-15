@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../logging/app_logger.dart';
+import '../logging/logger.dart';
 
-base class RiverpodObserver extends ProviderObserver {
+final class RiverpodObserver extends ProviderObserver {
   const new(this._logger, {this.enabled = false});
 
-  final AppLogger _logger;
+  final Logger _logger;
   final bool enabled;
 
   static const _tag = 'Riverpod';

@@ -1,6 +1,6 @@
-import 'app_logger.dart';
+import 'logger.dart';
 
-/// Templated placeholder implementation of [AppLogger] for production / Sentry.
+/// Templated placeholder implementation of [Logger] for production / Sentry.
 ///
 /// ### Future Sentry Integration & Architecture Evolution:
 /// When `sentry_flutter` is integrated into this application, this class can
@@ -23,14 +23,14 @@ import 'app_logger.dart';
 ///      snapshots with exception reports.
 ///
 /// 4. **Performance Tracing & Transactions**:
-///    - If performance monitoring is added, [AppLogger] can be extended with
+///    - If performance monitoring is added, [Logger] can be extended with
 ///      tracing methods (e.g., `startSpan(...)`, `finishTransaction(...)`) or
 ///      integrated with Riverpod and AutoRoute performance navigators.
 ///
 /// 5. **User Scoping & Context**:
 ///    - Supporting `setUser(...)` or `setContext(...)` methods to attach
 ///      anonymized user IDs or environment variables to Sentry error reports.
-class SentryAppLogger implements AppLogger {
+final class SentryLogger implements Logger {
   const new();
 
   @override

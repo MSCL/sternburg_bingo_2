@@ -49,6 +49,7 @@ app.*.map.json
 
 # Generated code files
 *.g.dart
+*.gr.dart
 
 # Slang translation analysis files
 _*_translations.json

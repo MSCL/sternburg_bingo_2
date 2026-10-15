@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-abstract interface class AppLogger {
+abstract interface class Logger {
   void info(String message, {String? tag});
 
   void error(
@@ -11,7 +11,7 @@ abstract interface class AppLogger {
   });
 }
 
-class ConsoleAppLogger implements AppLogger {
+final class ConsoleLogger implements Logger {
   const new();
 
   @override

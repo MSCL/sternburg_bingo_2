@@ -8,7 +8,7 @@ import '../../storage/local_storage.dart';
 part 'theme_provider.g.dart';
 
 @riverpod
-class ThemeModeNotifier extends _$ThemeModeNotifier {
+final class ThemeModeNotifier extends _$ThemeModeNotifier {
   static const _themeKey = 'selected_theme_mode';
 
   @override

@@ -1,16 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
+import 'core/logging/provider/logger_provider.dart';
+import 'core/router/navigation_observer.dart';
+import 'core/router/router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/provider/theme_provider.dart';
-import 'features/home/presentation/home_screen.dart';
 import 'i18n/strings.g.dart';
 
-class App extends ConsumerWidget {
+final class App extends ConsumerWidget {
   const new({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => MaterialApp(
+  Widget build(BuildContext context, WidgetRef ref) => MaterialApp.router(
     debugShowCheckedModeBanner: false,
     title: t.appName,
     theme: AppTheme.lightTheme,
@@ -19,6 +21,12 @@ class App extends ConsumerWidget {
     locale: TranslationProvider.of(context).flutterLocale,
     supportedLocales: AppLocaleUtils.supportedLocales,
     localizationsDelegates: GlobalMaterialLocalizations.delegates,
-    home: const HomeScreen(),
+    routerConfig: ref
+        .watch(routerProvider)
+        .config(
+          navigatorObservers: () => [
+            NavigationObserver(ref.watch(loggerProvider)),
+          ],
+        ),
   );
 }

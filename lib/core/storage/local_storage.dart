@@ -11,7 +11,7 @@ final localStorageProvider = Provider<LocalStorage>((ref) {
   throw UnimplementedError('Must be overridden in ProviderScope!');
 });
 
-class SharedPreferencesLocalStorage implements LocalStorage {
+final class SharedPreferencesLocalStorage implements LocalStorage {
   const new(this._prefs);
 
   final SharedPreferencesWithCache _prefs;

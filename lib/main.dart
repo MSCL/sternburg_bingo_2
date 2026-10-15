@@ -4,9 +4,9 @@ import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
-import 'core/logging/app_logger.dart';
-import 'core/logging/provider/app_logger_provider.dart';
-import 'core/logging/sentry_app_logger.dart';
+import 'core/logging/logger.dart';
+import 'core/logging/provider/logger_provider.dart';
+import 'core/logging/sentry_logger.dart';
 import 'core/provider/riverpod_observer.dart';
 import 'core/storage/local_storage.dart';
 import 'i18n/strings.g.dart';
@@ -14,8 +14,9 @@ import 'i18n/strings.g.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  const logger = kDebugMode ? ConsoleAppLogger() : SentryAppLogger();
+  const logger = kDebugMode ? ConsoleLogger() : SentryLogger();
 
+  // disable when using SentryLogger
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
     logger.error(
@@ -26,6 +27,7 @@ Future<void> main() async {
     );
   };
 
+  // TODO fix lints here
   PlatformDispatcher.instance.onError = (error, stack) {
     logger.error(
       'Uncaught asynchronous error: $error',
@@ -51,7 +53,7 @@ Future<void> main() async {
       child: ProviderScope(
         observers: const [RiverpodObserver(logger)],
         overrides: [
-          appLoggerProvider.overrideWithValue(logger),
+          loggerProvider.overrideWithValue(logger),
           localStorageProvider.overrideWithValue(
             SharedPreferencesLocalStorage(
               init.first as SharedPreferencesWithCache,
