@@ -1,0 +1,20 @@
+# upgrade all packages to latest possible versions
+flutter pub upgrade --major-versions --unlock-transitive --tighten
+
+# run all code generation (including localization)
+dart run build_runner build\
+
+# clean all generated files
+dart run build_runner clean
+
+# run all tests
+flutter test --test-randomize-ordering-seed=random
+
+# detect unused and missing translations
+dart run slang analyze
+
+# sort translations according to base locale
+dart run slang normalize
+
+# automatically update CFBundleLocalizations
+dart run slang configure

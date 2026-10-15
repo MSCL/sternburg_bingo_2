@@ -1,5 +1,10 @@
 targets:
   $default:
+    sources:
+      - $package$
+      - lib/**
+      - .env*
+      - assets/**
     builders:
       riverpod_generator|riverpod_generator:
         generate_for:

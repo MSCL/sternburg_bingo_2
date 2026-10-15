@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'app_router.gr.dart';
+import 'router.gr.dart';
 
 @AutoRouterConfig()
 final class Router extends RootStackRouter {
