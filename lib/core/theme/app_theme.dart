@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 final class AppTheme {
-  AppTheme._();
+  new _();
 
-  static const Color _red = Color(0xFFE30613);
+  static const _red = Color(0xFFE30613);
 
   static ThemeData get lightTheme => ThemeData.from(
     useMaterial3: true,

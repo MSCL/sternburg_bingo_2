@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'core/theme/app_theme.dart';
 import 'core/theme/provider/theme_provider.dart';
@@ -9,7 +9,7 @@ void main() {
 }
 
 class SternburgBingoApp extends ConsumerWidget {
-  const SternburgBingoApp({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +26,7 @@ class SternburgBingoApp extends ConsumerWidget {
 }
 
 class HomeScreen extends ConsumerWidget {
-  const HomeScreen({super.key});
+  const new({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
