@@ -5,3 +5,9 @@ targets:
         generate_for:
           include:
             - lib/**/*_provider.dart
+      slang_build_runner:
+        options:
+          base_locale: de
+          input_directory: assets/i18n
+          output_directory: lib/i18n
+          output_file_name: strings.g.dart

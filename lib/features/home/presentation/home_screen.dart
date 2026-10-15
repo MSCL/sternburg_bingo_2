@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../core/theme/provider/theme_provider.dart';
+import '../../../i18n/strings.g.dart';
 
 class HomeScreen extends ConsumerWidget {
   const new({super.key});
@@ -11,14 +12,14 @@ class HomeScreen extends ConsumerWidget {
     final currentThemeMode = ref.watch(themeModeProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Sternburg Bingo')),
+      appBar: AppBar(title: Text(t.appName)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Welcome to Sternburg Bingo!',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              t.welcome,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -30,8 +31,8 @@ class HomeScreen extends ConsumerWidget {
               },
               child: Text(
                 currentThemeMode == ThemeMode.dark
-                    ? 'Switch to Light Mode'
-                    : 'Switch to Dark Mode',
+                    ? t.switchToLight
+                    : t.switchToDark,
               ),
             ),
           ],
