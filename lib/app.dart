@@ -9,15 +9,11 @@ class SternburgBingoApp extends ConsumerWidget {
   const new({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
-
-    return MaterialApp(
-      title: 'Sternburg Bingo',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: themeMode,
-      home: const HomeScreen(),
-    );
-  }
+  Widget build(BuildContext context, WidgetRef ref) => MaterialApp(
+    title: 'Sternburg Bingo',
+    theme: AppTheme.lightTheme,
+    darkTheme: AppTheme.darkTheme,
+    themeMode: ref.watch(themeModeProvider),
+    home: const HomeScreen(),
+  );
 }

@@ -3,17 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
-import 'core/storage/app_preferences.dart';
+import 'core/storage/local_storage.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final sharedPreferences = await SharedPreferences.getInstance();
 
   runApp(
     ProviderScope(
       overrides: [
-        appPreferencesProvider.overrideWithValue(
-          SharedPreferencesAppPreferences(sharedPreferences),
+        localStorageProvider.overrideWithValue(
+          SharedPreferencesLocalStorage(
+            await SharedPreferencesWithCache.create(
+              cacheOptions: const SharedPreferencesWithCacheOptions(),
+            ),
+          ),
         ),
       ],
       child: const SternburgBingoApp(),
