@@ -2,7 +2,7 @@
 flutter pub upgrade --major-versions --unlock-transitive --tighten
 
 # run all code generation (including localization)
-dart run build_runner build\
+dart run build_runner build
 
 # clean all generated files
 dart run build_runner clean
@@ -18,3 +18,9 @@ dart run slang normalize
 
 # automatically update CFBundleLocalizations
 dart run slang configure
+
+# generate splash screen
+dart run flutter_native_splash:create
+
+# cleanup generated splash screen
+dart run flutter_native_splash:remove

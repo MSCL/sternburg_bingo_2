@@ -6,7 +6,7 @@ void main() {
   group('i18n', () {
     test('Should compile', () async {
       final Translations de = await AppLocale.de.build();
-      expect(de.appName, 'Sternburg Bingo');
+      expect(de.appName, 'Sternbingo');
     });
 
     test('All locales should be supported by Flutter', () {
