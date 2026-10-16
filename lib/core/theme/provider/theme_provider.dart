@@ -9,11 +9,13 @@ part 'theme_provider.g.dart';
 
 @riverpod
 final class ThemeModeNotifier extends _$ThemeModeNotifier {
-  static const _themeKey = 'selected_theme_mode';
+  static const String _themeKey = 'selected_theme_mode';
 
   @override
   ThemeMode build() {
-    final savedMode = ref.read(localStorageProvider).getString(_themeKey);
+    final String? savedMode = ref
+        .read(localStorageProvider)
+        .getString(_themeKey);
     if (savedMode == ThemeMode.light.name) {
       return ThemeMode.light;
     } else if (savedMode == ThemeMode.dark.name) {

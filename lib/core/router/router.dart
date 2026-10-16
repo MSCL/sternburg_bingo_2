@@ -10,9 +10,9 @@ final class Router extends RootStackRouter {
       const RouteType.material(enablePredictiveBackGesture: true);
 
   @override
-  List<AutoRoute> get routes => [
+  List<AutoRoute> get routes => <AutoRoute>[
     AutoRoute(page: HomeRoute.page, initial: true),
   ];
 }
 
-final routerProvider = Provider<Router>((ref) => Router());
+final Provider<Router> routerProvider = Provider<Router>((Ref ref) => Router());

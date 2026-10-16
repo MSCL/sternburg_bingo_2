@@ -9,7 +9,7 @@ final class NavigationObserver extends AutoRouteObserver {
   final Logger _logger;
   final bool enabled;
 
-  static const _tag = 'Navigation';
+  static const String _tag = 'Navigation';
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {

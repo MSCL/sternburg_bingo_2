@@ -17,7 +17,7 @@ abstract final class Env {
   static const String apiUrl = _Env.apiUrl;
 
   // useful in case a variable needs to be accessed from native side
-  static const _serviceId = 'SERVICE_ID';
+  static const String _serviceId = 'SERVICE_ID';
   static final String serviceId = const bool.hasEnvironment(_serviceId)
       ? const String.fromEnvironment(_serviceId)
       : throw const FormatException(

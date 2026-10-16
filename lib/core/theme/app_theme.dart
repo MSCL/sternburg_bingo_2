@@ -3,7 +3,7 @@ import 'package:material_ui/material_ui.dart';
 final class AppTheme {
   new _();
 
-  static const _red = Color(0xFFE30613);
+  static const Color _red = Color(0xFFE30613);
 
   static ThemeData get lightTheme => ThemeData.from(
     useMaterial3: true,

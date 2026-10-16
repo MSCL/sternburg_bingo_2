@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:sternburg_bingo_2/core/storage/local_storage.dart';
 import 'package:sternburg_bingo_2/core/theme/provider/theme_provider.dart';
 
 final class _FakeLocalStorage implements LocalStorage {
-  new([Map<String, String>? initialData]) : _data = {...?initialData};
+  new([Map<String, String>? initialData])
+    : _data = <String, String>{...?initialData};
 
   final Map<String, String> _data;
 
@@ -17,13 +19,13 @@ final class _FakeLocalStorage implements LocalStorage {
 }
 
 void main() {
-  const themeKey = 'selected_theme_mode';
-  const light = 'light';
-  const dark = 'dark';
+  const String themeKey = 'selected_theme_mode';
+  const String light = 'light';
+  const String dark = 'dark';
 
   ProviderContainer createContainer([LocalStorage? localStorage]) {
-    final container = ProviderContainer(
-      overrides: [
+    final ProviderContainer container = ProviderContainer(
+      overrides: <Override>[
         localStorageProvider.overrideWithValue(
           localStorage ?? _FakeLocalStorage(),
         ),
@@ -35,24 +37,30 @@ void main() {
 
   group('ThemeModeNotifier', () {
     test('defaults to ThemeMode.system when no saved mode exists', () {
-      final container = createContainer();
+      final ProviderContainer container = createContainer();
       expect(container.read(themeModeProvider), ThemeMode.system);
     });
 
     test('restores ThemeMode.light from local storage', () {
-      final container = createContainer(_FakeLocalStorage({themeKey: light}));
+      final ProviderContainer container = createContainer(
+        _FakeLocalStorage(<String, String>{themeKey: light}),
+      );
       expect(container.read(themeModeProvider), ThemeMode.light);
     });
 
     test('restores ThemeMode.dark from local storage', () {
-      final container = createContainer(_FakeLocalStorage({themeKey: dark}));
+      final ProviderContainer container = createContainer(
+        _FakeLocalStorage(<String, String>{themeKey: dark}),
+      );
       expect(container.read(themeModeProvider), ThemeMode.dark);
     });
 
     test('updates theme mode state and persists to local storage', () {
-      final fakeStorage = _FakeLocalStorage();
-      final container = createContainer(fakeStorage);
-      final notifier = container.read(themeModeProvider.notifier);
+      final _FakeLocalStorage fakeStorage = _FakeLocalStorage();
+      final ProviderContainer container = createContainer(fakeStorage);
+      final ThemeModeNotifier notifier = container.read(
+        themeModeProvider.notifier,
+      );
 
       expect(container.read(themeModeProvider), ThemeMode.system);
 

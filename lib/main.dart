@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,10 +15,10 @@ import 'i18n/strings.g.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  const logger = kDebugMode ? ConsoleLogger() : SentryLogger();
+  const Logger logger = kDebugMode ? ConsoleLogger() : SentryLogger();
 
   // disable when using SentryLogger
-  FlutterError.onError = (details) {
+  FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
     logger.error(
       'Uncaught Flutter framework error: ${details.exceptionAsString()}',
@@ -27,10 +28,9 @@ Future<void> main() async {
     );
   };
 
-  // TODO fix lints here
-  PlatformDispatcher.instance.onError = (error, stack) {
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
     logger.error(
-      'Uncaught asynchronous error: $error',
+      'Uncaught asynchronous error',
       error: error,
       stackTrace: stack,
       tag: 'PlatformError',
@@ -41,7 +41,7 @@ Future<void> main() async {
   // create custom error widget
   // ErrorWidget.builder = (details) => Material();
 
-  final init = await Future.wait([
+  final List<Object> init = await Future.wait(<Future<Object>>[
     SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(),
     ),
@@ -51,8 +51,8 @@ Future<void> main() async {
   runApp(
     TranslationProvider(
       child: ProviderScope(
-        observers: const [RiverpodObserver(logger)],
-        overrides: [
+        observers: const <ProviderObserver>[RiverpodObserver(logger)],
+        overrides: <Override>[
           loggerProvider.overrideWithValue(logger),
           localStorageProvider.overrideWithValue(
             SharedPreferencesLocalStorage(

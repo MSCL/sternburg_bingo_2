@@ -11,14 +11,14 @@ final class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentThemeMode = ref.watch(themeModeProvider);
+    final ThemeMode currentThemeMode = ref.watch(themeModeProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(t.appName)),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text(
               t.welcome,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -26,7 +26,7 @@ final class HomeScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                final nextMode = currentThemeMode == ThemeMode.dark
+                final ThemeMode nextMode = currentThemeMode == ThemeMode.dark
                     ? ThemeMode.light
                     : ThemeMode.dark;
                 ref.read(themeModeProvider.notifier).setThemeMode(nextMode);

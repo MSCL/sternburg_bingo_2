@@ -12,33 +12,46 @@ final class _FakeTabPageRoute extends Fake implements TabPageRoute {
 }
 
 void main() {
-  const routeAName = 'RouteA';
-  const routeBName = 'RouteB';
-  const tabAName = 'TabA';
-  const tabBName = 'TabB';
+  const String routeAName = 'RouteA';
+  const String routeBName = 'RouteB';
+  const String tabAName = 'TabA';
+  const String tabBName = 'TabB';
 
   String navInfo(String msg) => 'INFO: [Navigation] $msg';
 
   group('NavigationObserver', () {
-    final routeA = PageRouteBuilder<dynamic>(
+    final PageRouteBuilder<dynamic> routeA = PageRouteBuilder<dynamic>(
       settings: const RouteSettings(name: routeAName),
-      pageBuilder: (_, __, ___) => const SizedBox(),
+      pageBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) => const SizedBox(),
     );
-    final routeB = PageRouteBuilder<dynamic>(
+    final PageRouteBuilder<dynamic> routeB = PageRouteBuilder<dynamic>(
       settings: const RouteSettings(name: routeBName),
-      pageBuilder: (_, __, ___) => const SizedBox(),
+      pageBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) => const SizedBox(),
     );
 
     (NavigationObserver, List<String>) createObserver({bool enabled = false}) {
-      final logs = <String>[];
-      final observer = NavigationObserver(_TestLogger(logs), enabled: enabled);
+      final List<String> logs = <String>[];
+      final NavigationObserver observer = NavigationObserver(
+        _TestLogger(logs),
+        enabled: enabled,
+      );
       return (observer, logs);
     }
 
     test(
       'logs navigation push, pop, replace, and remove events when enabled',
       () {
-        final (observer, logs) = createObserver(enabled: true);
+        final (NavigationObserver observer, List<String> logs) = createObserver(
+          enabled: true,
+        );
 
         observer
           ..didPush(routeA, null)
@@ -46,7 +59,7 @@ void main() {
           ..didReplace(newRoute: routeB, oldRoute: routeA)
           ..didRemove(routeB, routeA);
 
-        expect(logs, [
+        expect(logs, <String>[
           navInfo('Push: $routeAName'),
           navInfo('Pop: $routeAName'),
           navInfo('Replace: $routeAName -> $routeBName'),
@@ -56,24 +69,26 @@ void main() {
     );
 
     test('logs tab route navigation events when enabled', () {
-      final (observer, logs) = createObserver(enabled: true);
+      final (NavigationObserver observer, List<String> logs) = createObserver(
+        enabled: true,
+      );
 
-      final tabA = _FakeTabPageRoute(tabAName);
-      final tabB = _FakeTabPageRoute(tabBName);
+      final _FakeTabPageRoute tabA = _FakeTabPageRoute(tabAName);
+      final _FakeTabPageRoute tabB = _FakeTabPageRoute(tabBName);
 
       observer
         ..didInitTabRoute(tabA, null)
         ..didChangeTabRoute(tabB, tabA);
 
-      expect(logs, [
+      expect(logs, <String>[
         navInfo('InitTabRoute: $tabAName'),
         navInfo('ChangeTabRoute: $tabAName -> $tabBName'),
       ]);
     });
 
     test('does not log any navigation events when disabled', () {
-      final (observer, logs) = createObserver();
-      final tabA = _FakeTabPageRoute(tabAName);
+      final (NavigationObserver observer, List<String> logs) = createObserver();
+      final _FakeTabPageRoute tabA = _FakeTabPageRoute(tabAName);
 
       observer
         ..didPush(routeA, null)

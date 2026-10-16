@@ -7,7 +7,9 @@ abstract interface class LocalStorage {
   Future<void> setString(String key, String value);
 }
 
-final localStorageProvider = Provider<LocalStorage>((ref) {
+final Provider<LocalStorage> localStorageProvider = Provider<LocalStorage>((
+  Ref ref,
+) {
   throw UnimplementedError('Must be overridden in ProviderScope!');
 });
 

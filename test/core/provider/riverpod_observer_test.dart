@@ -11,26 +11,31 @@ final class _TestNotifier extends Notifier<int> {
 }
 
 void main() {
-  const providerName = 'NotifierProvider<_TestNotifier, int>';
+  const String providerName = 'NotifierProvider<_TestNotifier, int>';
 
   String riverpodInfo(String msg) => 'INFO: [Riverpod] $msg';
   String riverpodError(String msg) => 'ERROR: [Riverpod] $msg';
 
   group('RiverpodObserver', () {
     (ProviderContainer, List<String>) createContainer({bool enabled = false}) {
-      final logs = <String>[];
-      final observer = RiverpodObserver(_TestLogger(logs), enabled: enabled);
-      final container = ProviderContainer(observers: [observer]);
+      final List<String> logs = <String>[];
+      final RiverpodObserver observer = RiverpodObserver(
+        _TestLogger(logs),
+        enabled: enabled,
+      );
+      final ProviderContainer container = ProviderContainer(
+        observers: <ProviderObserver>[observer],
+      );
       return (container, logs);
     }
 
     test(
       'logs provider init, update, failure, and dispose events when enabled',
       () {
-        final (container, logs) = createContainer(enabled: true);
-        final counterProvider = NotifierProvider<_TestNotifier, int>(
-          _TestNotifier.new,
-        );
+        final (ProviderContainer container, List<String> logs) =
+            createContainer(enabled: true);
+        final NotifierProvider<_TestNotifier, int> counterProvider =
+            NotifierProvider<_TestNotifier, int>(_TestNotifier.new);
 
         // Add & read
         expect(container.read(counterProvider), 0);
@@ -41,13 +46,13 @@ void main() {
         expect(logs, contains(riverpodInfo('Updated: $providerName | 0 -> 1')));
 
         // Failure
-        final failingProvider = Provider<int>(
-          (ref) => throw Exception('Test error'),
+        final Provider<int> failingProvider = Provider<int>(
+          (Ref ref) => throw Exception('Test error'),
         );
         expect(() => container.read(failingProvider), throwsException);
         expect(
           logs.any(
-            (log) => log.contains(
+            (String log) => log.contains(
               riverpodError('Failure in Provider<int>: Exception: Test error'),
             ),
           ),
@@ -61,10 +66,10 @@ void main() {
     );
 
     test('does not log events when disabled', () {
-      final (container, logs) = createContainer();
-      final counterProvider = NotifierProvider<_TestNotifier, int>(
-        _TestNotifier.new,
-      );
+      final (ProviderContainer container, List<String> logs) =
+          createContainer();
+      final NotifierProvider<_TestNotifier, int> counterProvider =
+          NotifierProvider<_TestNotifier, int>(_TestNotifier.new);
 
       container.read(counterProvider);
       container.read(counterProvider.notifier).increment();

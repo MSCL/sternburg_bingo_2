@@ -4,7 +4,7 @@ import 'package:sternburg_bingo_2/core/storage/local_storage.dart';
 
 final class _FakeSharedPreferencesWithCache extends Fake
     implements SharedPreferencesWithCache {
-  final Map<String, String> _store = {};
+  final Map<String, String> _store = <String, String>{};
 
   @override
   String? getString(String key) => _store[key];
@@ -14,11 +14,11 @@ final class _FakeSharedPreferencesWithCache extends Fake
 }
 
 void main() {
-  const testKey = 'test_key';
-  const testValue = 'test_value';
-  const themeKey = 'theme';
-  const lightValue = 'light';
-  const darkValue = 'dark';
+  const String testKey = 'test_key';
+  const String testValue = 'test_value';
+  const String themeKey = 'theme';
+  const String lightValue = 'light';
+  const String darkValue = 'dark';
 
   group('SharedPreferencesLocalStorage', () {
     late SharedPreferencesLocalStorage localStorage;

@@ -8,7 +8,7 @@ final class RiverpodObserver extends ProviderObserver {
   final Logger _logger;
   final bool enabled;
 
-  static const _tag = 'Riverpod';
+  static const String _tag = 'Riverpod';
 
   @override
   void didAddProvider(ProviderObserverContext context, Object? value) {

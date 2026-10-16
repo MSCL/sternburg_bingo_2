@@ -24,7 +24,7 @@ final class App extends ConsumerWidget {
     routerConfig: ref
         .watch(routerProvider)
         .config(
-          navigatorObservers: () => [
+          navigatorObservers: () => <NavigatorObserver>[
             NavigationObserver(ref.watch(loggerProvider)),
           ],
         ),
