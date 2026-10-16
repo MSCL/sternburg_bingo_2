@@ -1,4 +1,3 @@
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -6,6 +5,7 @@ import 'core/analytics/analytics_provider.dart';
 import 'core/logging/logger_provider.dart';
 import 'core/router/navigation_observer.dart';
 import 'core/router/router.dart';
+import 'core/splash/splash_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'i18n/strings.g.dart';
@@ -23,7 +23,7 @@ final class _AppState extends ConsumerState<App> {
     super.initState();
     // could later also go into the first real home screen
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) => FlutterNativeSplash.remove(),
+      (_) => ref.read(splashServiceProvider).remove(),
     );
   }
 
