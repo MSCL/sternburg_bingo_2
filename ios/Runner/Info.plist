@@ -75,5 +75,11 @@
 		<true/>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
+		<!-- Disable default global Firebase data collection on startup until user consents -->
+		<key>FirebaseAutomaticDataCollectionEnabled</key>
+		<false/>
+		<!-- Disable default Firebase Analytics collection on startup until user consents -->
+		<key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+		<false/>
 	</dict>
 </plist>

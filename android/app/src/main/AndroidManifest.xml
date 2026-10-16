@@ -33,6 +33,14 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Disable default global Firebase data collection on startup until user consents -->
+        <meta-data
+            android:name="firebase_automatic_data_collection_enabled"
+            android:value="false" />
+        <!-- Disable default Firebase Analytics collection on startup until user consents -->
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="false" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

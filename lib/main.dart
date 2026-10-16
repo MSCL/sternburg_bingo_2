@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,12 @@ import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
+import 'core/analytics/analytics_service.dart';
+import 'core/analytics/firebase_analytics_service.dart';
+import 'core/analytics/provider/analytics_provider.dart';
+import 'core/feature_flags/feature_flag_service.dart';
+import 'core/feature_flags/firebase_feature_flag_service.dart';
+import 'core/feature_flags/provider/feature_flag_provider.dart';
 import 'core/logging/logger.dart';
 import 'core/logging/provider/logger_provider.dart';
 import 'core/logging/sentry_logger.dart';
@@ -42,15 +49,22 @@ Future<void> main() async {
     return true;
   };
 
-  // create custom error widget
-  // ErrorWidget.builder = (details) => Material();
-
   final List<Object> init = await Future.wait(<Future<Object>>[
     SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(),
     ),
     LocaleSettings.useDeviceLocale(),
+    Firebase.initializeApp(),
   ]);
+
+  final LocalStorage localStorage = SharedPreferencesLocalStorage(
+    init[0] as SharedPreferencesWithCache,
+  );
+  final FirebaseApp app = init[2] as FirebaseApp;
+
+  final AnalyticsService analyticsService = FirebaseAnalyticsService(app);
+  final FeatureFlagService featureFlagService = FirebaseFeatureFlagService(app);
+  await featureFlagService.initialize();
 
   runApp(
     TranslationProvider(
@@ -58,11 +72,9 @@ Future<void> main() async {
         observers: const <ProviderObserver>[RiverpodObserver(logger)],
         overrides: <Override>[
           loggerProvider.overrideWithValue(logger),
-          localStorageProvider.overrideWithValue(
-            SharedPreferencesLocalStorage(
-              init.first as SharedPreferencesWithCache,
-            ),
-          ),
+          analyticsServiceProvider.overrideWithValue(analyticsService),
+          featureFlagServiceProvider.overrideWithValue(featureFlagService),
+          localStorageProvider.overrideWithValue(localStorage),
         ],
         child: const App(),
       ),

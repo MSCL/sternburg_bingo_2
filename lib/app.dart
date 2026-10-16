@@ -2,6 +2,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
+import 'core/analytics/provider/analytics_provider.dart';
 import 'core/logging/provider/logger_provider.dart';
 import 'core/router/navigation_observer.dart';
 import 'core/router/router.dart';
@@ -40,7 +41,10 @@ final class _AppState extends ConsumerState<App> {
         .watch(routerProvider)
         .config(
           navigatorObservers: () => <NavigatorObserver>[
-            NavigationObserver(ref.watch(loggerProvider)),
+            NavigationObserver(
+              ref.watch(loggerProvider),
+              ref.watch(analyticsServiceProvider),
+            ),
           ],
         ),
   );

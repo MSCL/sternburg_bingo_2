@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sternburg_bingo_2/core/logging/logger.dart';
 import 'package:sternburg_bingo_2/core/router/navigation_observer.dart';
+
+import '../../fakes/fake_analytics_service.dart';
+import '../../fakes/fake_logger.dart';
 
 final class _FakeTabPageRoute extends Fake implements TabPageRoute {
   new(this.name);
@@ -37,19 +39,27 @@ void main() {
       ) => const SizedBox(),
     );
 
-    (NavigationObserver, List<String>) createObserver({bool enabled = false}) {
-      final List<String> logs = <String>[];
+    (NavigationObserver, FakeLogger, FakeAnalyticsService) createObserver({
+      bool enabled = false,
+    }) {
+      final FakeLogger logger = FakeLogger();
+      final FakeAnalyticsService analyticsService = FakeAnalyticsService();
       final NavigationObserver observer = NavigationObserver(
-        _TestLogger(logs),
+        logger,
+        analyticsService,
         enabled: enabled,
       );
-      return (observer, logs);
+      return (observer, logger, analyticsService);
     }
 
     test(
       'logs navigation push, pop, replace, and remove events when enabled',
       () {
-        final (NavigationObserver observer, List<String> logs) = createObserver(
+        final (
+          NavigationObserver observer,
+          FakeLogger logger,
+          FakeAnalyticsService analyticsService,
+        ) = createObserver(
           enabled: true,
         );
 
@@ -59,17 +69,23 @@ void main() {
           ..didReplace(newRoute: routeB, oldRoute: routeA)
           ..didRemove(routeB, routeA);
 
-        expect(logs, <String>[
+        expect(logger.logs, <String>[
           navInfo('Push: $routeAName'),
           navInfo('Pop: $routeAName'),
           navInfo('Replace: $routeAName -> $routeBName'),
           navInfo('Remove: $routeBName'),
         ]);
+
+        expect(analyticsService.screens, <String>[routeAName, routeBName]);
       },
     );
 
     test('logs tab route navigation events when enabled', () {
-      final (NavigationObserver observer, List<String> logs) = createObserver(
+      final (
+        NavigationObserver observer,
+        FakeLogger logger,
+        FakeAnalyticsService analyticsService,
+      ) = createObserver(
         enabled: true,
       );
 
@@ -80,14 +96,20 @@ void main() {
         ..didInitTabRoute(tabA, null)
         ..didChangeTabRoute(tabB, tabA);
 
-      expect(logs, <String>[
+      expect(logger.logs, <String>[
         navInfo('InitTabRoute: $tabAName'),
         navInfo('ChangeTabRoute: $tabAName -> $tabBName'),
       ]);
+
+      expect(analyticsService.screens, <String>[tabAName, tabBName]);
     });
 
-    test('does not log any navigation events when disabled', () {
-      final (NavigationObserver observer, List<String> logs) = createObserver();
+    test('does not log events when disabled but tracks screens', () {
+      final (
+        NavigationObserver observer,
+        FakeLogger logger,
+        FakeAnalyticsService analyticsService,
+      ) = createObserver();
       final _FakeTabPageRoute tabA = _FakeTabPageRoute(tabAName);
 
       observer
@@ -97,24 +119,12 @@ void main() {
         ..didRemove(routeB, routeA)
         ..didInitTabRoute(tabA, null);
 
-      expect(logs, isEmpty);
+      expect(logger.logs, isEmpty);
+      expect(analyticsService.screens, <String>[
+        routeAName,
+        routeBName,
+        tabAName,
+      ]);
     });
   });
-}
-
-final class _TestLogger implements Logger {
-  const new(this.logs);
-
-  final List<String> logs;
-
-  @override
-  void info(String message, {String? tag}) => logs.add('INFO: [$tag] $message');
-
-  @override
-  void error(
-    String message, {
-    Object? error,
-    StackTrace? stackTrace,
-    String? tag,
-  }) => logs.add('ERROR: [$tag] $message');
 }

@@ -5,18 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:sternburg_bingo_2/core/storage/local_storage.dart';
 import 'package:sternburg_bingo_2/core/theme/provider/theme_provider.dart';
 
-final class _FakeLocalStorage implements LocalStorage {
-  new([Map<String, String>? initialData])
-    : _data = <String, String>{...?initialData};
-
-  final Map<String, String> _data;
-
-  @override
-  String? getString(String key) => _data[key];
-
-  @override
-  Future<void> setString(String key, String value) async => _data[key] = value;
-}
+import '../../../fakes/fake_local_storage.dart';
 
 void main() {
   const String themeKey = 'selected_theme_mode';
@@ -27,7 +16,7 @@ void main() {
     final ProviderContainer container = ProviderContainer(
       overrides: <Override>[
         localStorageProvider.overrideWithValue(
-          localStorage ?? _FakeLocalStorage(),
+          localStorage ?? FakeLocalStorage(),
         ),
       ],
     );
@@ -43,20 +32,20 @@ void main() {
 
     test('restores ThemeMode.light from local storage', () {
       final ProviderContainer container = createContainer(
-        _FakeLocalStorage(<String, String>{themeKey: light}),
+        FakeLocalStorage(<String, Object>{themeKey: light}),
       );
       expect(container.read(themeModeProvider), ThemeMode.light);
     });
 
     test('restores ThemeMode.dark from local storage', () {
       final ProviderContainer container = createContainer(
-        _FakeLocalStorage(<String, String>{themeKey: dark}),
+        FakeLocalStorage(<String, Object>{themeKey: dark}),
       );
       expect(container.read(themeModeProvider), ThemeMode.dark);
     });
 
     test('updates theme mode state and persists to local storage', () {
-      final _FakeLocalStorage fakeStorage = _FakeLocalStorage();
+      final FakeLocalStorage fakeStorage = FakeLocalStorage();
       final ProviderContainer container = createContainer(fakeStorage);
       final ThemeModeNotifier notifier = container.read(
         themeModeProvider.notifier,
