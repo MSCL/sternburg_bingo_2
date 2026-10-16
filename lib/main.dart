@@ -7,14 +7,14 @@ import 'package:material_ui/material_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app.dart';
+import 'core/analytics/analytics_provider.dart';
 import 'core/analytics/analytics_service.dart';
 import 'core/analytics/firebase_analytics_service.dart';
-import 'core/analytics/provider/analytics_provider.dart';
+import 'core/feature_flags/feature_flag_provider.dart';
 import 'core/feature_flags/feature_flag_service.dart';
 import 'core/feature_flags/firebase_feature_flag_service.dart';
-import 'core/feature_flags/provider/feature_flag_provider.dart';
 import 'core/logging/logger.dart';
-import 'core/logging/provider/logger_provider.dart';
+import 'core/logging/logger_provider.dart';
 import 'core/logging/sentry_logger.dart';
 import 'core/provider/riverpod_observer.dart';
 import 'core/storage/local_storage.dart';

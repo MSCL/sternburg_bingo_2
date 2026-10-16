@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 
-import '../../provider/provider_utils.dart';
-import '../feature_flag.dart';
-import '../feature_flag_service.dart';
+import '../provider/provider_utils.dart';
+import 'feature_flag.dart';
+import 'feature_flag_service.dart';
 
 /// Provider for [FeatureFlagService]. Must be overridden in [ProviderScope].
 final Provider<FeatureFlagService> featureFlagServiceProvider =

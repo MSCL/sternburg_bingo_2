@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:sternburg_bingo_2/core/storage/local_storage.dart';
-import 'package:sternburg_bingo_2/core/theme/provider/theme_provider.dart';
+import 'package:sternburg_bingo_2/core/theme/theme_provider.dart';
 
-import '../../../fakes/fake_local_storage.dart';
+import '../../fakes/fake_local_storage.dart';
 
 void main() {
   const String themeKey = 'selected_theme_mode';

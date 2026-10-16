@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../provider/provider_utils.dart';
-import '../../storage/local_storage.dart';
-import '../analytics_service.dart';
+import '../provider/provider_utils.dart';
+import '../storage/local_storage.dart';
+import 'analytics_service.dart';
 
 /// Provider for [AnalyticsService]. Must be overridden in [ProviderScope].
 final Provider<AnalyticsService> analyticsServiceProvider =

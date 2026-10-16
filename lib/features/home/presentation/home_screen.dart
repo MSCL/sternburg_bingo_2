@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../../core/theme/provider/theme_provider.dart';
+import '../../../core/theme/theme_provider.dart';
 import '../../../i18n/strings.g.dart';
 
 @RoutePage()

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../storage/local_storage.dart';
+import '../storage/local_storage.dart';
 
 part 'theme_provider.g.dart';
 
