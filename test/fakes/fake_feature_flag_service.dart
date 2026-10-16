@@ -14,7 +14,4 @@ final class FakeFeatureFlagService implements FeatureFlagService {
 
   @override
   bool isEnabled(FeatureFlag flag) => _enabledFlags[flag] ?? flag.defaultValue;
-
-  @override
-  Future<bool> fetchAndActivate() async => true;
 }

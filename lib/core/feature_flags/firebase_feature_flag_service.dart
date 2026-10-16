@@ -9,8 +9,8 @@ import 'feature_flag.dart';
 import 'feature_flag_service.dart';
 
 final class FirebaseFeatureFlagService implements FeatureFlagService {
-  new(FirebaseApp app, this._logger)
-    : _remoteConfig = FirebaseRemoteConfig.instanceFor(app: app);
+  new(FirebaseApp _, this._logger)
+    : _remoteConfig = FirebaseRemoteConfig.instance;
 
   final Logger _logger;
   final FirebaseRemoteConfig _remoteConfig;
@@ -39,12 +39,10 @@ final class FirebaseFeatureFlagService implements FeatureFlagService {
       ),
     );
 
-    final Map<String, Object> defaultValues = <String, Object>{
+    await _remoteConfig.setDefaults(<String, Object>{
       for (final FeatureFlag flag in FeatureFlag.values)
         flag.key: flag.defaultValue,
-    };
-
-    await _remoteConfig.setDefaults(defaultValues);
+    });
     await _remoteConfig.activate();
     unawaited(fetchAndActivate());
   }
@@ -52,10 +50,9 @@ final class FirebaseFeatureFlagService implements FeatureFlagService {
   @override
   bool isEnabled(FeatureFlag flag) => _remoteConfig.getBool(flag.key);
 
-  @override
-  Future<bool> fetchAndActivate() async {
+  Future<void> fetchAndActivate() async {
     try {
-      return await _remoteConfig.fetchAndActivate();
+      await _remoteConfig.fetchAndActivate();
     } on FirebaseException catch (e, stackTrace) {
       if (!e.isOfflineOrTimeout) {
         _logger.error(
@@ -65,7 +62,6 @@ final class FirebaseFeatureFlagService implements FeatureFlagService {
           tag: _tag,
         );
       }
-      return false;
     }
   }
 }

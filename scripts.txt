@@ -42,3 +42,6 @@ flutterfire configure
 
 # install xcodeproj (needed for flutterfire configure)
 sudo gem install xcodeproj -v 1.24.0
+
+# get app SHA keys for local builds
+"/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/keytool" -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
