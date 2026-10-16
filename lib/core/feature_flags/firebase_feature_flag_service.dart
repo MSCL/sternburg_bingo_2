@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +17,17 @@ final class FirebaseFeatureFlagService implements FeatureFlagService {
 
   static const String _tag = 'FeatureFlag';
 
+  /// Initializes Remote Config settings and default values, activates
+  /// previously cached values immediately from disk, and fires a non-blocking
+  /// background fetch.
+  ///
+  /// **Limitation:**
+  /// Directly after app startup, newly updated remote feature flags from the
+  /// server may not be active yet. The app immediately renders using previously
+  /// cached values (from prior sessions) or local defaults. Any updated values
+  /// fetched in the background will take effect on the next app startup (or
+  /// upon a manual refresh). This can be adjusted later if synchronous flag
+  /// loading is needed.
   @override
   Future<void> initialize() async {
     await _remoteConfig.setConfigSettings(
@@ -32,7 +45,8 @@ final class FirebaseFeatureFlagService implements FeatureFlagService {
     };
 
     await _remoteConfig.setDefaults(defaultValues);
-    await fetchAndActivate();
+    await _remoteConfig.activate();
+    unawaited(fetchAndActivate());
   }
 
   @override

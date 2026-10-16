@@ -27,7 +27,35 @@ Future<void> main() async {
 
   // also via env
   const Logger logger = kDebugMode ? ConsoleLogger() : SentryLogger();
+  _setupErrorHandling(logger);
 
+  final (
+    LocalStorage localStorage,
+    _,
+    (AnalyticsService analyticsService, FeatureFlagService featureFlagService),
+  ) = await (
+    _initLocalStorage(),
+    LocaleSettings.useDeviceLocale(),
+    _initFirebaseServices(logger),
+  ).wait;
+
+  runApp(
+    TranslationProvider(
+      child: ProviderScope(
+        observers: const <ProviderObserver>[RiverpodObserver(logger)],
+        overrides: <Override>[
+          loggerProvider.overrideWithValue(logger),
+          analyticsServiceProvider.overrideWithValue(analyticsService),
+          featureFlagServiceProvider.overrideWithValue(featureFlagService),
+          localStorageProvider.overrideWithValue(localStorage),
+        ],
+        child: const App(),
+      ),
+    ),
+  );
+}
+
+void _setupErrorHandling(Logger logger) {
   // disable when using SentryLogger
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
@@ -48,39 +76,24 @@ Future<void> main() async {
     );
     return true;
   };
+}
 
-  final List<Object> init = await Future.wait(<Future<Object>>[
-    SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    ),
-    LocaleSettings.useDeviceLocale(),
-    Firebase.initializeApp(),
-  ]);
+Future<LocalStorage> _initLocalStorage() async {
+  final SharedPreferencesWithCache prefs =
+      await SharedPreferencesWithCache.create(
+        cacheOptions: const SharedPreferencesWithCacheOptions(),
+      );
+  return SharedPreferencesLocalStorage(prefs);
+}
 
-  final LocalStorage localStorage = SharedPreferencesLocalStorage(
-    init[0] as SharedPreferencesWithCache,
-  );
-  final FirebaseApp app = init[2] as FirebaseApp;
-
-  final AnalyticsService analyticsService = FirebaseAnalyticsService(app);
+Future<(AnalyticsService, FeatureFlagService)> _initFirebaseServices(
+  Logger logger,
+) async {
+  final FirebaseApp app = await Firebase.initializeApp();
   final FeatureFlagService featureFlagService = FirebaseFeatureFlagService(
     app,
     logger,
   );
   await featureFlagService.initialize();
-
-  runApp(
-    TranslationProvider(
-      child: ProviderScope(
-        observers: const <ProviderObserver>[RiverpodObserver(logger)],
-        overrides: <Override>[
-          loggerProvider.overrideWithValue(logger),
-          analyticsServiceProvider.overrideWithValue(analyticsService),
-          featureFlagServiceProvider.overrideWithValue(featureFlagService),
-          localStorageProvider.overrideWithValue(localStorage),
-        ],
-        child: const App(),
-      ),
-    ),
-  );
+  return (FirebaseAnalyticsService(app), featureFlagService);
 }
