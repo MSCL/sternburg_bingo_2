@@ -16,7 +16,7 @@ final class NavigationObserver extends AutoRouteObserver {
   static const String _tag = 'Navigation';
 
   @override
-  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didPush(Route<Object?> route, Route<Object?>? previousRoute) {
     super.didPush(route, previousRoute);
     final String? routeName = route.settings.name;
     if (routeName != null) {
@@ -29,7 +29,7 @@ final class NavigationObserver extends AutoRouteObserver {
   }
 
   @override
-  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didPop(Route<Object?> route, Route<Object?>? previousRoute) {
     super.didPop(route, previousRoute);
     final String? previousName = previousRoute?.settings.name;
     if (previousName != null) {
@@ -42,7 +42,7 @@ final class NavigationObserver extends AutoRouteObserver {
   }
 
   @override
-  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+  void didReplace({Route<Object?>? newRoute, Route<Object?>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
     final String? newName = newRoute?.settings.name;
     if (newName != null) {
@@ -55,7 +55,7 @@ final class NavigationObserver extends AutoRouteObserver {
   }
 
   @override
-  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didRemove(Route<Object?> route, Route<Object?>? previousRoute) {
     super.didRemove(route, previousRoute);
     if (!enabled) {
       return;

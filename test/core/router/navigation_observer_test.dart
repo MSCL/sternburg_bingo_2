@@ -22,7 +22,7 @@ void main() {
   String navInfo(String msg) => 'INFO: [Navigation] $msg';
 
   group('NavigationObserver', () {
-    final PageRouteBuilder<dynamic> routeA = PageRouteBuilder<dynamic>(
+    final PageRouteBuilder<Object?> routeA = PageRouteBuilder<Object?>(
       settings: const RouteSettings(name: routeAName),
       pageBuilder: (
         BuildContext context,
@@ -30,7 +30,7 @@ void main() {
         Animation<double> secondaryAnimation,
       ) => const SizedBox(),
     );
-    final PageRouteBuilder<dynamic> routeB = PageRouteBuilder<dynamic>(
+    final PageRouteBuilder<Object?> routeB = PageRouteBuilder<Object?>(
       settings: const RouteSettings(name: routeBName),
       pageBuilder: (
         BuildContext context,

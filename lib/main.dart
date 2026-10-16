@@ -63,7 +63,10 @@ Future<void> main() async {
   final FirebaseApp app = init[2] as FirebaseApp;
 
   final AnalyticsService analyticsService = FirebaseAnalyticsService(app);
-  final FeatureFlagService featureFlagService = FirebaseFeatureFlagService(app);
+  final FeatureFlagService featureFlagService = FirebaseFeatureFlagService(
+    app,
+    logger,
+  );
   await featureFlagService.initialize();
 
   runApp(
