@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "273495401052",
+    "project_id": "sternburg-bingo-893e4",
+    "storage_bucket": "sternburg-bingo-893e4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:273495401052:android:4263b145b2195545367c99",
+        "android_client_info": {
+          "package_name": "dev.martinschlegel.sternburg_bingo_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6H7NYn6sUU4Jd14gT-zXWA0AiDdXHVEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

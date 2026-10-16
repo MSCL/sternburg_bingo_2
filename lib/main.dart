@@ -18,6 +18,7 @@ import 'core/logging/logger_provider.dart';
 import 'core/logging/sentry_logger.dart';
 import 'core/provider/riverpod_observer.dart';
 import 'core/storage/local_storage.dart';
+import 'firebase_options.dart';
 import 'i18n/strings.g.dart';
 
 Future<void> main() async {
@@ -87,7 +88,9 @@ Future<LocalStorage> _initLocalStorage() async => SharedPreferencesLocalStorage(
 Future<(AnalyticsService, FeatureFlagService)> _initFirebaseServices(
   Logger logger,
 ) async {
-  final FirebaseApp app = await Firebase.initializeApp();
+  final FirebaseApp app = await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   final FeatureFlagService featureFlagService = FirebaseFeatureFlagService(
     app,
     logger,

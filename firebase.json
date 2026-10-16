@@ -1,0 +1,30 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "sternburg-bingo-893e4",
+          "appId": "1:273495401052:android:4263b145b2195545367c99",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "sternburg-bingo-893e4",
+          "appId": "1:273495401052:ios:c67b60cdf8d260a5367c99",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "sternburg-bingo-893e4",
+          "configurations": {
+            "android": "1:273495401052:android:4263b145b2195545367c99",
+            "ios": "1:273495401052:ios:c67b60cdf8d260a5367c99"
+          }
+        }
+      }
+    }
+  }
+}

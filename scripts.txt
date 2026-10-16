@@ -24,3 +24,21 @@ dart run flutter_native_splash:create
 
 # cleanup generated splash screen
 dart run flutter_native_splash:remove
+
+# install firebase
+curl -sL https://firebase.tools | bash
+
+# upgrade firebase
+curl -sL https://firebase.tools | upgrade=true bash
+
+# login to firebase (google account needs to be added to firebase sternburg bingo project)
+firebase login
+
+# activate flutterfire cli
+dart pub global activate flutterfire_cli
+
+# configure project
+flutterfire configure
+
+# install xcodeproj (needed for flutterfire configure)
+sudo gem install xcodeproj -v 1.24.0
