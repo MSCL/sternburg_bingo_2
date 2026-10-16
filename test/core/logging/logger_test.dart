@@ -4,15 +4,16 @@ import 'package:sternburg_bingo_2/core/logging/sentry_logger.dart';
 
 void main() {
   group('Logger', () {
-    test('Logger implementations execute without errors', () {
-      expect(() {
+    test(
+      'Logger implementations execute without errors',
+      () => expect(() {
         const ConsoleLogger()
           ..info('Info')
           ..error('Error');
         const SentryLogger()
           ..info('Info')
           ..error('Error');
-      }, returnsNormally);
-    });
+      }, returnsNormally),
+    );
   });
 }

@@ -23,15 +23,16 @@ void main() {
   group('SharedPreferencesLocalStorage', () {
     late SharedPreferencesLocalStorage localStorage;
 
-    setUp(() {
-      localStorage = SharedPreferencesLocalStorage(
+    setUp(
+      () => localStorage = SharedPreferencesLocalStorage(
         _FakeSharedPreferencesWithCache(),
-      );
-    });
+      ),
+    );
 
-    test('returns null when key is not found in storage', () {
-      expect(localStorage.getString('non_existent_key'), isNull);
-    });
+    test(
+      'returns null when key is not found in storage',
+      () => expect(localStorage.getString('non_existent_key'), isNull),
+    );
 
     test('stores and retrieves string values correctly', () async {
       await localStorage.setString(testKey, testValue);

@@ -20,13 +20,9 @@ final ProviderFamily<bool, FeatureFlag> _featureFlagProvider =
 
 extension FeatureFlagX on FeatureFlag {
   /// Returns whether this feature flag is enabled for a [WidgetRef] or [Ref].
-  bool isEnabled(Object ref) {
-    if (ref is WidgetRef) {
-      return ref.watch(_featureFlagProvider(this));
-    }
-    if (ref is Ref) {
-      return ref.watch(_featureFlagProvider(this));
-    }
-    throw ArgumentError('ref must be either WidgetRef or Ref');
-  }
+  bool isEnabled(Object ref) => switch (ref) {
+    final WidgetRef wRef => wRef.watch(_featureFlagProvider(this)),
+    final Ref rRef => rRef.watch(_featureFlagProvider(this)),
+    _ => throw ArgumentError('ref must be either WidgetRef or Ref'),
+  };
 }

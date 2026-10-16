@@ -8,9 +8,8 @@ final class FakeLogger implements Logger {
   final List<String> logs;
 
   @override
-  void info(String message, {String? tag}) {
-    logs.add('INFO: [${tag ?? 'INFO'}] $message');
-  }
+  void info(String message, {String? tag}) =>
+      logs.add('INFO: [${tag ?? 'INFO'}] $message');
 
   @override
   void error(
@@ -18,7 +17,5 @@ final class FakeLogger implements Logger {
     Object? error,
     StackTrace? stackTrace,
     String? tag,
-  }) {
-    logs.add('ERROR: [${tag ?? 'ERROR'}] $message');
-  }
+  }) => logs.add('ERROR: [${tag ?? 'ERROR'}] $message');
 }

@@ -78,13 +78,11 @@ void _setupErrorHandling(Logger logger) {
   };
 }
 
-Future<LocalStorage> _initLocalStorage() async {
-  final SharedPreferencesWithCache prefs =
-      await SharedPreferencesWithCache.create(
-        cacheOptions: const SharedPreferencesWithCacheOptions(),
-      );
-  return SharedPreferencesLocalStorage(prefs);
-}
+Future<LocalStorage> _initLocalStorage() async => SharedPreferencesLocalStorage(
+  await SharedPreferencesWithCache.create(
+    cacheOptions: const SharedPreferencesWithCacheOptions(),
+  ),
+);
 
 Future<(AnalyticsService, FeatureFlagService)> _initFirebaseServices(
   Logger logger,

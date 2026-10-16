@@ -25,24 +25,28 @@ void main() {
   }
 
   group('ThemeModeNotifier', () {
-    test('defaults to ThemeMode.system when no saved mode exists', () {
-      final ProviderContainer container = createContainer();
-      expect(container.read(themeModeProvider), ThemeMode.system);
-    });
+    test(
+      'defaults to ThemeMode.system when no saved mode exists',
+      () => expect(createContainer().read(themeModeProvider), ThemeMode.system),
+    );
 
-    test('restores ThemeMode.light from local storage', () {
-      final ProviderContainer container = createContainer(
-        FakeLocalStorage(<String, Object>{themeKey: light}),
-      );
-      expect(container.read(themeModeProvider), ThemeMode.light);
-    });
+    test(
+      'restores ThemeMode.light from local storage',
+      () => expect(
+        createContainer(FakeLocalStorage(<String, Object>{themeKey: light}))
+            .read(themeModeProvider),
+        ThemeMode.light,
+      ),
+    );
 
-    test('restores ThemeMode.dark from local storage', () {
-      final ProviderContainer container = createContainer(
-        FakeLocalStorage(<String, Object>{themeKey: dark}),
-      );
-      expect(container.read(themeModeProvider), ThemeMode.dark);
-    });
+    test(
+      'restores ThemeMode.dark from local storage',
+      () => expect(
+        createContainer(FakeLocalStorage(<String, Object>{themeKey: dark}))
+            .read(themeModeProvider),
+        ThemeMode.dark,
+      ),
+    );
 
     test('updates theme mode state and persists to local storage', () {
       final FakeLocalStorage fakeStorage = FakeLocalStorage();

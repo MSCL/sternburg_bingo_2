@@ -14,34 +14,24 @@ final class FakeAnalyticsService implements AnalyticsService {
   Future<void> logEvent({
     required String name,
     Map<String, Object>? parameters,
-  }) async {
-    loggedEvents.add(name);
-  }
+  }) async => loggedEvents.add(name);
 
   @override
-  Future<void> setCurrentScreen(String screenName) async {
-    screens.add(screenName);
-  }
+  Future<void> setCurrentScreen(String screenName) async =>
+      screens.add(screenName);
 
   @override
   Future<void> setUserProperty({
     required String name,
     required String? value,
-  }) async {
-    if (value == null) {
-      userProperties.remove(name);
-    } else {
-      userProperties[name] = value;
-    }
-  }
+  }) async => value == null
+      ? userProperties.remove(name)
+      : userProperties[name] = value;
 
   @override
-  Future<void> setUserId(String? userId) async {
-    this.userId = userId;
-  }
+  Future<void> setUserId(String? userId) async => this.userId = userId;
 
   @override
-  Future<void> setAnalyticsCollectionEnabled({required bool enabled}) async {
-    collectionEnabled = enabled;
-  }
+  Future<void> setAnalyticsCollectionEnabled({required bool enabled}) async =>
+      collectionEnabled = enabled;
 }

@@ -10,9 +10,7 @@ final class FakeFeatureFlagService implements FeatureFlagService {
   bool isInitialized = false;
 
   @override
-  Future<void> initialize() async {
-    isInitialized = true;
-  }
+  Future<void> initialize() async => isInitialized = true;
 
   @override
   bool isEnabled(FeatureFlag flag) => _enabledFlags[flag] ?? flag.defaultValue;

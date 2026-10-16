@@ -15,4 +15,4 @@ final class Router extends RootStackRouter {
   ];
 }
 
-final Provider<Router> routerProvider = Provider<Router>((Ref ref) => Router());
+final Provider<Router> routerProvider = Provider<Router>((_) => Router());
