@@ -18,7 +18,7 @@ targets:
           output_file_name: strings.g.dart
       auto_route_generator:auto_route_generator:
         generate_for:
-          - lib/features/**_screen.dart
+          - lib/features/**/*_screen.dart
       auto_route_generator:auto_router_generator:
         generate_for:
           - lib/core/router/router.dart

@@ -11,7 +11,14 @@ final class Router extends RootStackRouter {
 
   @override
   List<AutoRoute> get routes => <AutoRoute>[
-    AutoRoute(page: HomeRoute.page, initial: true),
+    AutoRoute(
+      page: DashboardRoute.page,
+      initial: true,
+      children: <AutoRoute>[
+        AutoRoute(page: HomeRoute.page),
+        AutoRoute(page: SettingsRoute.page),
+      ],
+    ),
   ];
 }
 

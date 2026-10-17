@@ -2,6 +2,11 @@
 
 Always follow these rules when generating or refactoring Dart/Flutter code in this project:
 
+## 0. Dart
+
+- never use `dynamic`, always use `Object?` instead
+- if possible use `await` and not `.then` notation
+
 ## 1. Closure / Tear-off Simplification
 
 - Always simplify redundant lambda closures like `() => function()` or `(arg) => function(arg)` to
