@@ -13,10 +13,10 @@ final class Router extends RootStackRouter {
   List<AutoRoute> get routes => <AutoRoute>[
     AutoRoute(
       page: DashboardRoute.page,
-      initial: true,
+      path: '/',
       children: <AutoRoute>[
-        AutoRoute(page: HomeRoute.page),
-        AutoRoute(page: SettingsRoute.page),
+        AutoRoute(page: HomeRoute.page, path: 'home', initial: true),
+        AutoRoute(page: SettingsRoute.page, path: 'settings'),
       ],
     ),
   ];

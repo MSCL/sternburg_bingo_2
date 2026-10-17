@@ -43,3 +43,5 @@ flutter run --args="-noFIRAnalyticsDebugEnabled"
    --args="-FIRAnalyticsVerboseLoggingEnabled"
    ```
 
+~/Library/Android/sdk/platform-tools/adb shell am start -a android.intent.action.VIEW -c
+android.intent.category.BROWSABLE -d "sternbingo:///settings" -> deep link showcase
