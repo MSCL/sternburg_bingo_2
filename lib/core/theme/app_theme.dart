@@ -1,8 +1,9 @@
+// Static theme configuration class.
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'package:material_ui/material_ui.dart';
 
-final class AppTheme {
-  new _();
-
+abstract final class AppTheme {
   static const Color _red = Color(0xFFE30613);
 
   static ThemeData get lightTheme => ThemeData.from(
