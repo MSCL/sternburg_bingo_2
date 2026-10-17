@@ -2,5 +2,29 @@
   "appName": "Sternbingo",
   "welcome": "Welcome to Sternbingo!",
   "switchToLight": "Switch to Light Mode",
-  "switchToDark": "Switch to Dark Mode"
+  "switchToDark": "Switch to Dark Mode",
+  "common": {
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "loading": "Loading...",
+    "unknown": "Unknown"
+  },
+  "navigation": {
+    "home": "Home",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "themeSystem": "System Default",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "notifications": "Notifications",
+    "osNotificationSettings": "Open Notification Settings",
+    "language": "Language",
+    "osLanguageSettings": "Open Language Settings",
+    "analytics": "Analytics & Privacy",
+    "about": "About",
+    "legals": "© $year $appName. All rights reserved."
+  }
 }

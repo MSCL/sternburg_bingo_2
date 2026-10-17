@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:app_settings/app_settings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -22,10 +21,6 @@ final class FirebasePushNotificationService implements PushNotificationService {
   @override
   Future<bool> isPermissionGranted() async =>
       (await _messaging.getNotificationSettings()).isGranted;
-
-  @override
-  Future<void> openNotificationSettings() =>
-      AppSettings.openAppSettings(type: AppSettingsType.notification);
 }
 
 extension on NotificationSettings {

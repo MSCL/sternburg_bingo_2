@@ -2,5 +2,29 @@
   "appName": "Sternbingo",
   "welcome": "Willkommen bei Sternbingo!",
   "switchToLight": "Zu hellem Modus wechseln",
-  "switchToDark": "Zu dunklem Modus wechseln"
+  "switchToDark": "Zu dunklem Modus wechseln",
+  "common": {
+    "enabled": "Aktiviert",
+    "disabled": "Deaktiviert",
+    "loading": "Lade...",
+    "unknown": "Unbekannt"
+  },
+  "navigation": {
+    "home": "Home",
+    "settings": "Einstellungen"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "theme": "Design",
+    "themeSystem": "Systemstandard",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel",
+    "notifications": "Benachrichtigungen",
+    "osNotificationSettings": "Benachrichtigungseinstellungen öffnen",
+    "language": "Sprache",
+    "osLanguageSettings": "Spracheinstellungen öffnen",
+    "analytics": "Analyse & Datenschutz",
+    "about": "Über die App",
+    "legals": "© $year $appName. Alle Rechte vorbehalten."
+  }
 }

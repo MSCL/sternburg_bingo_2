@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../core/i18n/strings.g.dart';
 import '../../../core/notifications/push_notification_provider.dart';
 import '../../../core/router/router.gr.dart';
+import '../../../core/splash/splash_provider.dart';
 
 @RoutePage()
 final class DashboardScreen extends ConsumerStatefulWidget {
@@ -20,9 +21,10 @@ final class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => unawaited(_requestNotificationPermission()),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(splashServiceProvider).remove();
+      unawaited(_requestNotificationPermission());
+    });
   }
 
   Future<void> _requestNotificationPermission() async {

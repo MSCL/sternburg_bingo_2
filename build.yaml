@@ -5,6 +5,7 @@ targets:
       - lib/**
       - .env*
       - assets/**
+      - pubspec.yaml
     builders:
       riverpod_generator|riverpod_generator:
         generate_for:

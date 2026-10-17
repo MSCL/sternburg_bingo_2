@@ -15,12 +15,17 @@ import '../feature_flags/feature_flag_provider.dart';
 import '../feature_flags/feature_flag_service.dart';
 import '../feature_flags/firebase_feature_flag_service.dart';
 import '../i18n/strings.g.dart';
+import '../info/app_info.dart';
+import '../info/package_info_provider.dart';
 import '../logging/logger.dart';
 import '../logging/logger_provider.dart';
 import '../logging/sentry_logger.dart';
 import '../notifications/firebase_push_notification_service.dart';
 import '../notifications/push_notification_provider.dart';
 import '../notifications/push_notification_service.dart';
+import '../settings/app_settings_provider.dart';
+import '../settings/app_settings_service.dart';
+import '../settings/app_settings_service_impl.dart';
 import '../splash/splash_provider.dart';
 import '../splash/splash_service.dart';
 import '../storage/local_storage.dart';
@@ -34,6 +39,8 @@ final class AppDependencies {
     required this.pushNotificationService,
     required this.localStorage,
     required this.splashService,
+    required this.appInfo,
+    required this.appSettingsService,
   });
 
   final Logger logger;
@@ -42,6 +49,8 @@ final class AppDependencies {
   final PushNotificationService pushNotificationService;
   final LocalStorage localStorage;
   final SplashService splashService;
+  final AppInfo appInfo;
+  final AppSettingsService appSettingsService;
 
   List<Override> toProviderOverrides() => <Override>[
     loggerProvider.overrideWithValue(logger),
@@ -50,23 +59,27 @@ final class AppDependencies {
     pushNotificationServiceProvider.overrideWithValue(pushNotificationService),
     localStorageProvider.overrideWithValue(localStorage),
     splashServiceProvider.overrideWithValue(splashService),
+    appInfoProvider.overrideWithValue(appInfo),
+    appSettingsServiceProvider.overrideWithValue(appSettingsService),
   ];
 }
 
 abstract final class AppInitializer {
   /// Initializes application services.
   ///
-  /// Synchronous dependencies ([splashService], [logger]) have non-nullable
-  /// default values. Asynchronous services ([localStorage], [analyticsService],
-  /// [featureFlagService], [pushNotificationService]) are initialized
-  /// automatically if omitted.
+  /// Synchronous dependencies ([splashService], [logger], [appSettingsService])
+  /// have non-nullable default values. Asynchronous services ([localStorage],
+  /// [analyticsService], [featureFlagService], [pushNotificationService],
+  /// [appInfo]) are initialized automatically if omitted.
   static Future<AppDependencies> initialize({
     SplashService splashService = const FlutterNativeSplashService(),
     Logger logger = kDebugMode ? const ConsoleLogger() : const SentryLogger(),
+    AppSettingsService appSettingsService = const AppSettingsServiceImpl(),
     LocalStorage? localStorage,
     AnalyticsService? analyticsService,
     FeatureFlagService? featureFlagService,
     PushNotificationService? pushNotificationService,
+    AppInfo? appInfo,
   }) async {
     final WidgetsBinding widgetsBinding =
         WidgetsFlutterBinding.ensureInitialized();
@@ -76,6 +89,7 @@ abstract final class AppInitializer {
 
     final (
       LocalStorage resolvedLocalStorage,
+      AppInfo resolvedAppInfo,
       _,
       (
         AnalyticsService resolvedAnalytics,
@@ -86,6 +100,7 @@ abstract final class AppInitializer {
       localStorage != null
           ? Future<LocalStorage>.value(localStorage)
           : _initLocalStorage(),
+      appInfo != null ? Future<AppInfo>.value(appInfo) : _initAppInfo(),
       LocaleSettings.useDeviceLocale(),
       _initFirebaseGroup(
         analyticsService: analyticsService,
@@ -102,8 +117,16 @@ abstract final class AppInitializer {
       pushNotificationService: resolvedPushNotifications,
       localStorage: resolvedLocalStorage,
       splashService: splashService,
+      appInfo: resolvedAppInfo,
+      appSettingsService: appSettingsService,
     );
   }
+
+  // Right now due to package version problems with package_info_plus,
+  // we hardcode AppInfo, but we would like to use package_info_plus for this in
+  // the future.
+  static Future<AppInfo> _initAppInfo() async =>
+      const AppInfo(appName: 'Sternbingo', version: '1.0.0', buildNumber: '1');
 
   static void _setupErrorHandling(Logger logger) {
     // disable when using SentryLogger

@@ -6,29 +6,14 @@ import 'core/i18n/strings.g.dart';
 import 'core/logging/logger_provider.dart';
 import 'core/router/navigation_observer.dart';
 import 'core/router/router.dart';
-import 'core/splash/splash_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 
-final class App extends ConsumerStatefulWidget {
+final class App extends ConsumerWidget {
   const new({super.key});
 
   @override
-  ConsumerState<App> createState() => _AppState();
-}
-
-final class _AppState extends ConsumerState<App> {
-  @override
-  void initState() {
-    super.initState();
-    // could later also go into the first real home screen
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => ref.read(splashServiceProvider).remove(),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) => MaterialApp.router(
+  Widget build(BuildContext context, WidgetRef ref) => MaterialApp.router(
     debugShowCheckedModeBanner: false,
     title: t.appName,
     theme: AppTheme.lightTheme,
