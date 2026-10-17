@@ -28,8 +28,10 @@ final class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   }
 
   Future<void> _requestNotificationPermission() async {
-    await ref.read(pushNotificationServiceProvider).requestPermission();
-    if (mounted) {
+    final bool updated = await ref
+        .read(pushNotificationServiceProvider)
+        .requestPermission();
+    if (mounted && updated) {
       ref.invalidate(isNotificationPermissionGrantedProvider);
     }
   }
