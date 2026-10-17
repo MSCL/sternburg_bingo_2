@@ -108,6 +108,8 @@ final class _LanguageTile extends ConsumerWidget {
       title: context.t.settings.language,
       subtitle: currentLocale.languageCode.toUpperCase(),
       trailing: TextButton(
+        // on iOS an OS language change kills the app, on Android not. if BE
+        // calls return localized data, this advanced logic needs to be added
         onPressed: () =>
             ref.read(appSettingsServiceProvider).openLanguageSettings(),
         child: Text(context.t.settings.osLanguageSettings),

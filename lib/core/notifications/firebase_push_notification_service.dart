@@ -15,8 +15,13 @@ final class FirebasePushNotificationService implements PushNotificationService {
   final FirebaseMessaging _messaging;
 
   @override
-  Future<bool> requestPermission() async =>
-      (await _messaging.requestPermission()).isGranted;
+  Future<void> requestPermission() async {
+    final NotificationSettings settings = await _messaging
+        .getNotificationSettings();
+    if (settings.authorizationStatus == AuthorizationStatus.notDetermined) {
+      await _messaging.requestPermission();
+    }
+  }
 
   @override
   Future<bool> isPermissionGranted() async =>

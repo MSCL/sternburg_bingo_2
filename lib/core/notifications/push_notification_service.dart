@@ -1,5 +1,5 @@
 abstract interface class PushNotificationService {
-  Future<bool> requestPermission();
+  Future<void> requestPermission();
 
   Future<bool> isPermissionGranted();
 }
