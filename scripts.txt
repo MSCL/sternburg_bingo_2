@@ -4,7 +4,7 @@ flutter pub upgrade --major-versions --unlock-transitive --tighten
 # run all code generation (including localization)
 dart run build_runner build
 
-# clean all generated files
+# clean all generated (via build runner) files
 dart run build_runner clean
 
 # run all tests
@@ -45,3 +45,9 @@ sudo gem install xcodeproj -v 1.24.0
 
 # get app SHA keys for local builds
 "/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/keytool" -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+
+# generate new launcher icon yaml file
+dart run flutter_launcher_icons:generate
+
+# generate new launcher icons
+dart run flutter_launcher_icons
