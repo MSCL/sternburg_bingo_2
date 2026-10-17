@@ -18,6 +18,9 @@ import '../feature_flags/firebase_feature_flag_service.dart';
 import '../logging/logger.dart';
 import '../logging/logger_provider.dart';
 import '../logging/sentry_logger.dart';
+import '../notifications/firebase_push_notification_service.dart';
+import '../notifications/push_notification_provider.dart';
+import '../notifications/push_notification_service.dart';
 import '../splash/splash_provider.dart';
 import '../splash/splash_service.dart';
 import '../storage/local_storage.dart';
@@ -28,6 +31,7 @@ final class AppDependencies {
     required this.logger,
     required this.analyticsService,
     required this.featureFlagService,
+    required this.pushNotificationService,
     required this.localStorage,
     required this.splashService,
   });
@@ -35,6 +39,7 @@ final class AppDependencies {
   final Logger logger;
   final AnalyticsService analyticsService;
   final FeatureFlagService featureFlagService;
+  final PushNotificationService pushNotificationService;
   final LocalStorage localStorage;
   final SplashService splashService;
 
@@ -42,6 +47,7 @@ final class AppDependencies {
     loggerProvider.overrideWithValue(logger),
     analyticsServiceProvider.overrideWithValue(analyticsService),
     featureFlagServiceProvider.overrideWithValue(featureFlagService),
+    pushNotificationServiceProvider.overrideWithValue(pushNotificationService),
     localStorageProvider.overrideWithValue(localStorage),
     splashServiceProvider.overrideWithValue(splashService),
   ];
@@ -52,13 +58,15 @@ abstract final class AppInitializer {
   ///
   /// Synchronous dependencies ([splashService], [logger]) have non-nullable
   /// default values. Asynchronous services ([localStorage], [analyticsService],
-  /// [featureFlagService]) are initialized automatically if omitted.
+  /// [featureFlagService], [pushNotificationService]) are initialized
+  /// automatically if omitted.
   static Future<AppDependencies> initialize({
     SplashService splashService = const FlutterNativeSplashService(),
     Logger logger = kDebugMode ? const ConsoleLogger() : const SentryLogger(),
     LocalStorage? localStorage,
     AnalyticsService? analyticsService,
     FeatureFlagService? featureFlagService,
+    PushNotificationService? pushNotificationService,
   }) async {
     final WidgetsBinding widgetsBinding =
         WidgetsFlutterBinding.ensureInitialized();
@@ -72,6 +80,7 @@ abstract final class AppInitializer {
       (
         AnalyticsService resolvedAnalytics,
         FeatureFlagService resolvedFeatureFlags,
+        PushNotificationService resolvedPushNotifications,
       ),
     ) = await (
       localStorage != null
@@ -81,6 +90,7 @@ abstract final class AppInitializer {
       _initFirebaseGroup(
         analyticsService: analyticsService,
         featureFlagService: featureFlagService,
+        pushNotificationService: pushNotificationService,
         logger: logger,
       ),
     ).wait;
@@ -89,6 +99,7 @@ abstract final class AppInitializer {
       logger: logger,
       analyticsService: resolvedAnalytics,
       featureFlagService: resolvedFeatureFlags,
+      pushNotificationService: resolvedPushNotifications,
       localStorage: resolvedLocalStorage,
       splashService: splashService,
     );
@@ -124,13 +135,17 @@ abstract final class AppInitializer {
         ),
       );
 
-  static Future<(AnalyticsService, FeatureFlagService)> _initFirebaseGroup({
+  static Future<(AnalyticsService, FeatureFlagService, PushNotificationService)>
+  _initFirebaseGroup({
     required AnalyticsService? analyticsService,
     required FeatureFlagService? featureFlagService,
+    required PushNotificationService? pushNotificationService,
     required Logger logger,
   }) async {
-    if (analyticsService != null && featureFlagService != null) {
-      return (analyticsService, featureFlagService);
+    if (analyticsService != null &&
+        featureFlagService != null &&
+        pushNotificationService != null) {
+      return (analyticsService, featureFlagService, pushNotificationService);
     }
 
     final FirebaseApp app = await Firebase.initializeApp(
@@ -140,6 +155,7 @@ abstract final class AppInitializer {
     return (
       analyticsService ?? FirebaseAnalyticsService(app),
       featureFlagService ?? await _initFeatureFlagService(app, logger),
+      pushNotificationService ?? FirebasePushNotificationService(app, logger),
     );
   }
 
