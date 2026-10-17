@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 
 import 'core/analytics/analytics_provider.dart';
 import 'core/i18n/strings.g.dart';
+import 'core/lifecycle/app_lifecycle_observer.dart';
 import 'core/logging/logger_provider.dart';
 import 'core/router/navigation_observer.dart';
 import 'core/router/router.dart';
@@ -13,24 +14,26 @@ final class App extends ConsumerWidget {
   const new({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => MaterialApp.router(
-    debugShowCheckedModeBanner: false,
-    title: context.t.appName,
-    theme: AppTheme.lightTheme,
-    darkTheme: AppTheme.darkTheme,
-    themeMode: ref.watch(themeModeProvider),
-    locale: TranslationProvider.of(context).flutterLocale,
-    supportedLocales: AppLocaleUtils.supportedLocales,
-    localizationsDelegates: GlobalMaterialLocalizations.delegates,
-    routerConfig: ref
-        .watch(routerProvider)
-        .config(
-          navigatorObservers: () => <NavigatorObserver>[
-            NavigationObserver(
-              ref.watch(loggerProvider),
-              ref.watch(analyticsServiceProvider),
-            ),
-          ],
-        ),
+  Widget build(BuildContext context, WidgetRef ref) => AppLifecycleObserver(
+    child: MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: context.t.appName,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ref.watch(themeModeProvider),
+      locale: TranslationProvider.of(context).flutterLocale,
+      supportedLocales: AppLocaleUtils.supportedLocales,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      routerConfig: ref
+          .watch(routerProvider)
+          .config(
+            navigatorObservers: () => <NavigatorObserver>[
+              NavigationObserver(
+                ref.watch(loggerProvider),
+                ref.watch(analyticsServiceProvider),
+              ),
+            ],
+          ),
+    ),
   );
 }
