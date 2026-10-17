@@ -25,9 +25,9 @@ final class FirebaseFeatureFlagService implements FeatureFlagService {
   /// Directly after app startup, newly updated remote feature flags from the
   /// server may not be active yet. The app immediately renders using previously
   /// cached values (from prior sessions) or local defaults. Any updated values
-  /// fetched in the background will take effect on the next app startup (or
-  /// upon a manual refresh). This can be adjusted later if synchronous flag
-  /// loading is needed.
+  /// fetched in the background will take effect once they are loaded. This can
+  /// be adjusted later if synchronous flag loading is needed, e.g. feature flag
+  /// changes UI of the dashboard screen.
   @override
   Future<void> initialize() async {
     await _remoteConfig.setConfigSettings(
