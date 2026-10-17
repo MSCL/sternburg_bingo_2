@@ -14,7 +14,7 @@ targets:
         options:
           base_locale: de
           input_directory: assets/i18n
-          output_directory: lib/i18n
+          output_directory: lib/core/i18n
           output_file_name: strings.g.dart
       auto_route_generator:auto_route_generator:
         generate_for:

@@ -8,13 +8,13 @@ import 'package:flutter_riverpod/misc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../firebase_options.dart';
-import '../../i18n/strings.g.dart';
 import '../analytics/analytics_provider.dart';
 import '../analytics/analytics_service.dart';
 import '../analytics/firebase_analytics_service.dart';
 import '../feature_flags/feature_flag_provider.dart';
 import '../feature_flags/feature_flag_service.dart';
 import '../feature_flags/firebase_feature_flag_service.dart';
+import '../i18n/strings.g.dart';
 import '../logging/logger.dart';
 import '../logging/logger_provider.dart';
 import '../logging/sentry_logger.dart';

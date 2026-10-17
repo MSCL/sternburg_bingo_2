@@ -1,6 +1,6 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sternburg_bingo_2/i18n/strings.g.dart';
+import 'package:sternburg_bingo_2/core/i18n/strings.g.dart';
 
 void main() {
   group('i18n', () {
