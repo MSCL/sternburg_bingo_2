@@ -20,7 +20,7 @@ final class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AppScaffold(
     useSafeArea: false,
-    title: t.settings.title,
+    title: context.t.settings.title,
     body: ListView(
       children: const <Widget>[
         _ThemeTile(),
@@ -42,7 +42,7 @@ final class _ThemeTile extends ConsumerWidget {
 
     return AppTile(
       icon: Icons.palette_outlined,
-      title: t.settings.theme,
+      title: context.t.settings.theme,
       trailing: DropdownButton<ThemeMode>(
         value: themeMode,
         onChanged: (ThemeMode? newMode) {
@@ -53,15 +53,15 @@ final class _ThemeTile extends ConsumerWidget {
         items: <DropdownMenuItem<ThemeMode>>[
           DropdownMenuItem<ThemeMode>(
             value: ThemeMode.system,
-            child: Text(t.settings.themeSystem),
+            child: Text(context.t.settings.themeSystem),
           ),
           DropdownMenuItem<ThemeMode>(
             value: ThemeMode.light,
-            child: Text(t.settings.themeLight),
+            child: Text(context.t.settings.themeLight),
           ),
           DropdownMenuItem<ThemeMode>(
             value: ThemeMode.dark,
-            child: Text(t.settings.themeDark),
+            child: Text(context.t.settings.themeDark),
           ),
         ],
       ),
@@ -80,16 +80,17 @@ final class _NotificationsTile extends ConsumerWidget {
 
     return AppTile(
       icon: Icons.notifications_outlined,
-      title: t.settings.notifications,
+      title: context.t.settings.notifications,
       subtitle: isPermissionGranted.when(
-        data: (bool granted) => granted ? t.common.enabled : t.common.disabled,
-        loading: () => t.common.loading,
-        error: (Object _, StackTrace _) => t.common.unknown,
+        data: (bool granted) =>
+            granted ? context.t.common.enabled : context.t.common.disabled,
+        loading: () => context.t.common.loading,
+        error: (Object _, StackTrace _) => context.t.common.unknown,
       ),
       trailing: TextButton(
         onPressed: () =>
             ref.read(appSettingsServiceProvider).openNotificationSettings(),
-        child: Text(t.settings.osNotificationSettings),
+        child: Text(context.t.settings.osNotificationSettings),
       ),
     );
   }
@@ -104,12 +105,12 @@ final class _LanguageTile extends ConsumerWidget {
 
     return AppTile(
       icon: Icons.language_outlined,
-      title: t.settings.language,
+      title: context.t.settings.language,
       subtitle: currentLocale.languageCode.toUpperCase(),
       trailing: TextButton(
         onPressed: () =>
             ref.read(appSettingsServiceProvider).openLanguageSettings(),
-        child: Text(t.settings.osLanguageSettings),
+        child: Text(context.t.settings.osLanguageSettings),
       ),
     );
   }
@@ -124,7 +125,7 @@ final class _AnalyticsTile extends ConsumerWidget {
 
     return AppSwitchTile(
       icon: Icons.analytics_outlined,
-      title: t.settings.analytics,
+      title: context.t.settings.analytics,
       value: analyticsEnabled,
       onChanged: (bool value) => ref
           .read(analyticsEnabledProvider.notifier)
@@ -142,7 +143,7 @@ final class _AboutTile extends ConsumerWidget {
 
     return AppTile(
       icon: Icons.info_outline,
-      title: t.settings.about,
+      title: context.t.settings.about,
       onTap: () {
         final String name = appInfo.appName;
         showAboutDialog(
@@ -150,7 +151,7 @@ final class _AboutTile extends ConsumerWidget {
           applicationName: name,
           applicationVersion: '${appInfo.version} (${appInfo.buildNumber})',
           applicationIcon: Assets.appIcon.image(width: 48, height: 48),
-          applicationLegalese: t.settings.legals(
+          applicationLegalese: context.t.settings.legals(
             year: DateTime.now().year.toString(),
             appName: name,
           ),

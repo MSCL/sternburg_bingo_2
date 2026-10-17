@@ -15,7 +15,7 @@ final class App extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => MaterialApp.router(
     debugShowCheckedModeBanner: false,
-    title: t.appName,
+    title: context.t.appName,
     theme: AppTheme.lightTheme,
     darkTheme: AppTheme.darkTheme,
     themeMode: ref.watch(themeModeProvider),

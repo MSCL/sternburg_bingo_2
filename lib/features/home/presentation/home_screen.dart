@@ -11,7 +11,7 @@ final class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => AppScaffold(
-    title: t.appName,
+    title: context.t.appName,
     body: const Center(child: Placeholder()),
   );
 }

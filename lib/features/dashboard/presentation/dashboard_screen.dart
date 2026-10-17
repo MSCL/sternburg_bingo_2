@@ -45,12 +45,12 @@ final class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             NavigationDestination(
               icon: const Icon(Icons.home_outlined),
               selectedIcon: const Icon(Icons.home),
-              label: t.navigation.home,
+              label: context.t.navigation.home,
             ),
             NavigationDestination(
               icon: const Icon(Icons.settings_outlined),
               selectedIcon: const Icon(Icons.settings),
-              label: t.navigation.settings,
+              label: context.t.navigation.settings,
             ),
           ],
         ),
