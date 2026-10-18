@@ -18,6 +18,13 @@ String _getCardName(BuildContext context, int cardTypeIndex) =>
       _ => 'Bingo-Karte #${cardTypeIndex + 1}',
     };
 
+String _getCardNameById(BuildContext context, CardId cardId) =>
+    switch (cardId.id) {
+      '1' => context.t.bingoCard1Name,
+      '2' => context.t.bingoCard2Name,
+      _ => 'Bingo-Karte #${cardId.id}',
+    };
+
 @RoutePage()
 final class BingoScreen extends ConsumerStatefulWidget {
   const new({super.key});
@@ -28,9 +35,60 @@ final class BingoScreen extends ConsumerStatefulWidget {
 
 final class _BingoScreenState extends ConsumerState<BingoScreen> {
   int _selectedCardTypeIndex = 0;
+  bool _isWinDialogShowing = false;
+
+  Future<void> _showWinDialog() async {
+    if (_isWinDialogShowing || !mounted) {
+      return;
+    }
+
+    final BingoWinningCombo combo = ref.read(bingoProvider).winningCombo!;
+    final String cardName = _getCardNameById(context, combo.card.id);
+    final String numbers = combo.winningNumbers
+        .map((int n) => n.toString().padLeft(2, '0'))
+        .join(', ');
+
+    _isWinDialogShowing = true;
+    await showDialog<void>(
+      context: context,
+      builder: (BuildContext dialogContext) => AlertDialog(
+        title: Text(context.t.bingoWinDialogTitle),
+        content: Text(
+          context.t.bingoWinDialogMessage(cardName: cardName, numbers: numbers),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(context.t.bingoWinDialogOk),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.of(dialogContext).pop();
+              unawaited(
+                ref.read(bingoProvider.notifier).removeWinningCombo(combo),
+              );
+            },
+            child: Text(context.t.bingoWinDialogRemove),
+          ),
+        ],
+      ),
+    );
+    _isWinDialogShowing = false;
+  }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<BingoGameState>(bingoProvider, (
+      BingoGameState? previous,
+      BingoGameState next,
+    ) {
+      if ((previous == null || !previous.isWon) && next.isWon) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          unawaited(_showWinDialog());
+        });
+      }
+    });
+
     final BingoGameState gameState = ref.watch(bingoProvider);
     final List<BingoCard> availableCardTypes = ref
         .watch(bingoRepositoryProvider)
@@ -57,7 +115,7 @@ final class _BingoScreenState extends ConsumerState<BingoScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               if (gameState.isWon) ...<Widget>[
-                const _WinBannerWidget(),
+                _WinBannerWidget(onTap: _showWinDialog),
                 const SizedBox(height: 16),
               ],
               _CardTypesListWidget(
@@ -91,31 +149,40 @@ final class _BingoScreenState extends ConsumerState<BingoScreen> {
 }
 
 final class _WinBannerWidget extends StatelessWidget {
-  const new();
+  const new({required this.onTap});
+
+  final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => Container(
-    width: double.infinity,
-    padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: Colors.red.shade700,
+  Widget build(BuildContext context) => Material(
+    color: Colors.transparent,
+    child: InkWell(
+      onTap: onTap,
       borderRadius: BorderRadius.circular(12),
-      boxShadow: <BoxShadow>[
-        BoxShadow(
-          color: Colors.red.withValues(alpha: 0.4),
-          blurRadius: 8,
-          offset: const Offset(0, 4),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.red.shade700,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.red.withValues(alpha: 0.4),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-      ],
-    ),
-    child: Text(
-      context.t.bingoWonMessage,
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
+        child: Text(
+          context.t.bingoWonMessage,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
+        ),
       ),
-      textAlign: TextAlign.center,
     ),
   );
 }

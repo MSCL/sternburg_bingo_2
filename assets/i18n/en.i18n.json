@@ -33,5 +33,9 @@
   "bingoCollectedEmpty": "No numbers collected yet. Enter a number above!",
   "bingoCardTypesTitle": "Available Bingo Cards",
   "bingoCard1Name": "Bingo Card #1",
-  "bingoCard2Name": "Bingo Card #2"
+  "bingoCard2Name": "Bingo Card #2",
+  "bingoWinDialogTitle": "BINGO!",
+  "bingoWinDialogMessage": "Win on $cardName!\n\nWinning numbers: $numbers\n\nDo you want to remove this field and numbers from your collection?",
+  "bingoWinDialogOk": "OK",
+  "bingoWinDialogRemove": "Remove field & numbers"
 }

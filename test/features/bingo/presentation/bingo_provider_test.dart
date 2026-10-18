@@ -147,5 +147,36 @@ void main() {
         expect(repository.state, state2);
       },
     );
+
+    test(
+      'removeWinningCombo removes winning card count and winning line numbers',
+      () async {
+        // Card 1 row 0 numbers: 3, 27, 36, 89, 70 plus non-winning number 42
+        const BingoGameState initial = BingoGameState(
+          cardCounts: <CardId, int>{card1Id: 1},
+          collectedNumbers: <int, int>{3: 1, 27: 1, 36: 1, 89: 1, 70: 1, 42: 1},
+        );
+        final (ProviderContainer container, _FakeBingoRepository repository) =
+            createContainer(initialGameState: initial);
+        final BingoNotifier notifier = container.read(bingoProvider.notifier);
+
+        final BingoGameState initialGameState = container.read(bingoProvider);
+        expect(initialGameState.isWon, isTrue);
+        expect(initialGameState.winningCombo, isNotNull);
+
+        await notifier.removeWinningCombo(initialGameState.winningCombo!);
+
+        final BingoGameState state = container.read(bingoProvider);
+        expect(state.isWon, isFalse);
+        expect(state.cardCounts.containsKey(card1Id), isFalse);
+        expect(state.collectedNumbers.containsKey(3), isFalse);
+        expect(state.collectedNumbers.containsKey(27), isFalse);
+        expect(state.collectedNumbers.containsKey(36), isFalse);
+        expect(state.collectedNumbers.containsKey(89), isFalse);
+        expect(state.collectedNumbers.containsKey(70), isFalse);
+        expect(state.collectedNumbers[42], 1);
+        expect(repository.state, state);
+      },
+    );
   });
 }

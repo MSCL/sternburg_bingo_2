@@ -99,7 +99,19 @@ void main() {
           collectedNumbers: <int, int>{10: 1, 81: 1, 54: 1, 29: 1, 47: 1},
         );
         expect(row0.isWon, isTrue);
+        expect(row0.winningCombo?.card.id, card2Id);
       });
+    });
+
+    test('winningCombo returns correct card and numbers for winning line', () {
+      const BingoGameState state = BingoGameState(
+        cardCounts: <CardId, int>{card1Id: 1},
+        collectedNumbers: <int, int>{3: 1, 27: 1, 36: 1, 89: 1, 70: 1},
+      );
+
+      expect(state.winningCombo, isNotNull);
+      expect(state.winningCombo!.card.id, card1Id);
+      expect(state.winningCombo!.winningNumbers, <int>[3, 27, 36, 89, 70]);
     });
 
     test('serializes to and from JSON correctly', () {

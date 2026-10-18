@@ -36,6 +36,27 @@ final class BingoNotifier extends _$BingoNotifier {
     ),
   );
 
+  Future<void> removeWinningCombo(BingoWinningCombo combo) {
+    final Map<CardId, int> newCardCounts = _decrementMap(
+      state.cardCounts,
+      combo.card.id,
+    );
+
+    Map<int, int> newCollectedNumbers = Map<int, int>.from(
+      state.collectedNumbers,
+    );
+    for (final int winningNumber in combo.winningNumbers) {
+      newCollectedNumbers = _decrementMap(newCollectedNumbers, winningNumber);
+    }
+
+    return _saveState(
+      state.copyWith(
+        cardCounts: newCardCounts,
+        collectedNumbers: newCollectedNumbers,
+      ),
+    );
+  }
+
   Future<void> _saveState(BingoGameState newState) {
     state = newState;
     return ref.read(bingoRepositoryProvider).saveGameState(newState);
