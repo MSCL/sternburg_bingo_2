@@ -26,6 +26,7 @@ final class AnalyticsEnabledNotifier extends Notifier<bool> {
         .read(localStorageProvider)
         .getBool(_analyticsEnabledKey);
     final bool isEnabled = savedEnabled ?? false;
+    // maybe not needed to sync this here, in theory they should stay in sync
     unawaited(
       ref
           .read(analyticsServiceProvider)
@@ -34,9 +35,9 @@ final class AnalyticsEnabledNotifier extends Notifier<bool> {
     return isEnabled;
   }
 
-  Future<void> setAnalyticsEnabled({required bool enabled}) async {
+  Future<void> setAnalyticsEnabled({required bool enabled}) {
     state = enabled;
-    await Future.wait<void>(<Future<void>>[
+    return Future.wait<void>(<Future<void>>[
       ref
           .read(localStorageProvider)
           .setBool(_analyticsEnabledKey, value: enabled),

@@ -55,6 +55,7 @@ app.*.map.json
 *.g.dart
 *.gr.dart
 *.gen.dart
+*.freezed.dart
 
 # Slang translation analysis files
 _*_translations.json

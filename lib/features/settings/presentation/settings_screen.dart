@@ -20,7 +20,7 @@ final class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AppScaffold(
     useSafeArea: false,
-    title: context.t.settings.title,
+    title: context.t.settingsTitle,
     body: ListView(
       children: const <Widget>[
         _ThemeTile(),
@@ -42,26 +42,26 @@ final class _ThemeTile extends ConsumerWidget {
 
     return AppTile(
       icon: Icons.palette_outlined,
-      title: context.t.settings.theme,
+      title: context.t.settingsTheme,
       trailing: DropdownButton<ThemeMode>(
         value: themeMode,
-        onChanged: (ThemeMode? newMode) {
+        onChanged: (ThemeMode? newMode) async {
           if (newMode != null) {
-            ref.read(themeModeProvider.notifier).setThemeMode(newMode);
+            await ref.read(themeModeProvider.notifier).setThemeMode(newMode);
           }
         },
         items: <DropdownMenuItem<ThemeMode>>[
           DropdownMenuItem<ThemeMode>(
             value: ThemeMode.system,
-            child: Text(context.t.settings.themeSystem),
+            child: Text(context.t.settingsThemeSystem),
           ),
           DropdownMenuItem<ThemeMode>(
             value: ThemeMode.light,
-            child: Text(context.t.settings.themeLight),
+            child: Text(context.t.settingsThemeLight),
           ),
           DropdownMenuItem<ThemeMode>(
             value: ThemeMode.dark,
-            child: Text(context.t.settings.themeDark),
+            child: Text(context.t.settingsThemeDark),
           ),
         ],
       ),
@@ -80,17 +80,17 @@ final class _NotificationsTile extends ConsumerWidget {
 
     return AppTile(
       icon: Icons.notifications_outlined,
-      title: context.t.settings.notifications,
+      title: context.t.settingsNotifications,
       subtitle: isPermissionGranted.when(
         data: (bool granted) =>
-            granted ? context.t.common.enabled : context.t.common.disabled,
-        loading: () => context.t.common.loading,
-        error: (Object _, StackTrace _) => context.t.common.unknown,
+            granted ? context.t.commonEnabled : context.t.commonDisabled,
+        loading: () => context.t.commonLoading,
+        error: (Object _, StackTrace _) => context.t.commonUnknown,
       ),
       trailing: TextButton(
         onPressed: () =>
             ref.read(appSettingsServiceProvider).openNotificationSettings(),
-        child: Text(context.t.settings.osNotificationSettings),
+        child: Text(context.t.settingsOsNotificationSettings),
       ),
     );
   }
@@ -105,14 +105,14 @@ final class _LanguageTile extends ConsumerWidget {
 
     return AppTile(
       icon: Icons.language_outlined,
-      title: context.t.settings.language,
+      title: context.t.settingsLanguage,
       subtitle: currentLocale.languageCode.toUpperCase(),
       trailing: TextButton(
         // on iOS an OS language change kills the app, on Android not. if BE
         // calls return localized data, this advanced logic needs to be added
         onPressed: () =>
             ref.read(appSettingsServiceProvider).openLanguageSettings(),
-        child: Text(context.t.settings.osLanguageSettings),
+        child: Text(context.t.settingsOsLanguageSettings),
       ),
     );
   }
@@ -127,7 +127,7 @@ final class _AnalyticsTile extends ConsumerWidget {
 
     return AppSwitchTile(
       icon: Icons.analytics_outlined,
-      title: context.t.settings.analytics,
+      title: context.t.settingsAnalytics,
       value: analyticsEnabled,
       onChanged: (bool value) => ref
           .read(analyticsEnabledProvider.notifier)
@@ -145,7 +145,7 @@ final class _AboutTile extends ConsumerWidget {
 
     return AppTile(
       icon: Icons.info_outline,
-      title: context.t.settings.about,
+      title: context.t.settingsAbout,
       onTap: () {
         final String name = appInfo.appName;
         showAboutDialog(
@@ -153,7 +153,7 @@ final class _AboutTile extends ConsumerWidget {
           applicationName: name,
           applicationVersion: '${appInfo.version} (${appInfo.buildNumber})',
           applicationIcon: Assets.appIcon.image(width: 48, height: 48),
-          applicationLegalese: context.t.settings.legals(
+          applicationLegalese: context.t.settingsLegals(
             year: DateTime.now().year.toString(),
             appName: name,
           ),

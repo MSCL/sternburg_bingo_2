@@ -38,21 +38,21 @@ final class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) => AutoTabsScaffold(
-    routes: const <PageRouteInfo<Object?>>[HomeRoute(), SettingsRoute()],
+    routes: const <PageRouteInfo<Object?>>[BingoRoute(), SettingsRoute()],
     bottomNavigationBuilder: (BuildContext _, TabsRouter tabsRouter) =>
         NavigationBar(
           selectedIndex: tabsRouter.activeIndex,
           onDestinationSelected: tabsRouter.setActiveIndex,
           destinations: <NavigationDestination>[
             NavigationDestination(
-              icon: const Icon(Icons.home_outlined),
-              selectedIcon: const Icon(Icons.home),
-              label: context.t.navigation.home,
+              icon: const Icon(Icons.grid_on_outlined),
+              selectedIcon: const Icon(Icons.grid_on),
+              label: context.t.navigationBingo,
             ),
             NavigationDestination(
               icon: const Icon(Icons.settings_outlined),
               selectedIcon: const Icon(Icons.settings),
-              label: context.t.navigation.settings,
+              label: context.t.navigationSettings,
             ),
           ],
         ),

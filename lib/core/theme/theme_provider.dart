@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -24,8 +22,8 @@ final class ThemeModeNotifier extends _$ThemeModeNotifier {
     return ThemeMode.system;
   }
 
-  void setThemeMode(ThemeMode mode) {
+  Future<void> setThemeMode(ThemeMode mode) {
     state = mode;
-    unawaited(ref.read(localStorageProvider).setString(_themeKey, state.name));
+    return ref.read(localStorageProvider).setString(_themeKey, state.name);
   }
 }

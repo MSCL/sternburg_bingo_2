@@ -15,7 +15,7 @@ final class Router extends RootStackRouter {
       page: DashboardRoute.page,
       path: '/',
       children: <AutoRoute>[
-        AutoRoute(page: HomeRoute.page, path: 'home', initial: true),
+        AutoRoute(page: BingoRoute.page, path: 'bingo', initial: true),
         AutoRoute(page: SettingsRoute.page, path: 'settings'),
       ],
     ),

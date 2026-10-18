@@ -48,7 +48,7 @@ void main() {
       ),
     );
 
-    test('updates theme mode state and persists to local storage', () {
+    test('updates theme mode state and persists to local storage', () async {
       final FakeLocalStorage fakeStorage = FakeLocalStorage();
       final ProviderContainer container = createContainer(fakeStorage);
       final ThemeModeNotifier notifier = container.read(
@@ -57,11 +57,11 @@ void main() {
 
       expect(container.read(themeModeProvider), ThemeMode.system);
 
-      notifier.setThemeMode(ThemeMode.dark);
+      await notifier.setThemeMode(ThemeMode.dark);
       expect(container.read(themeModeProvider), ThemeMode.dark);
       expect(fakeStorage.getString(themeKey), dark);
 
-      notifier.setThemeMode(ThemeMode.light);
+      await notifier.setThemeMode(ThemeMode.light);
       expect(container.read(themeModeProvider), ThemeMode.light);
       expect(fakeStorage.getString(themeKey), light);
     });
