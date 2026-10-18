@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../core/i18n/strings.g.dart';
+import '../../../core/router/router.gr.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/app_scaffold.dart';
 import '../domain/bingo_game_state.dart';
-import 'bingo_constants.dart';
 import 'bingo_provider.dart';
 import 'widgets/bingo_card_list.dart';
 import 'widgets/bingo_collected_numbers.dart';
@@ -33,41 +33,8 @@ final class _BingoScreenState extends ConsumerState<BingoScreen> {
       return;
     }
 
-    final BingoWinningCombo? combo = ref.read(bingoProvider).winningCombo;
-    if (combo == null) {
-      return;
-    }
-
-    final String cardName = context.t.bingoCardName(id: combo.card.id.id);
-    final String numbers = combo.winningNumbers
-        .map(formatBingoNumber)
-        .join(', ');
-
     _isWinDialogShowing = true;
-    await showDialog<void>(
-      context: context,
-      builder: (BuildContext dialogContext) => AlertDialog(
-        title: Text(context.t.bingoWinDialogTitle),
-        content: Text(
-          context.t.bingoWinDialogMessage(cardName: cardName, numbers: numbers),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => unawaited(dialogContext.router.maybePop()),
-            child: Text(context.t.bingoWinDialogOk),
-          ),
-          FilledButton(
-            onPressed: () {
-              unawaited(dialogContext.router.maybePop());
-              unawaited(
-                ref.read(bingoProvider.notifier).removeWinningCombo(combo),
-              );
-            },
-            child: Text(context.t.bingoWinDialogRemove),
-          ),
-        ],
-      ),
-    );
+    await context.router.push(const BingoWinDialogRoute());
     _isWinDialogShowing = false;
   }
 
@@ -96,7 +63,7 @@ final class _BingoScreenState extends ConsumerState<BingoScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: appSpacingXl,
           children: <Widget>[
-            if (isWon) BingoWinBanner(onTap: () => unawaited(_showWinDialog())),
+            if (isWon) BingoWinBanner(onTap: _showWinDialog),
             BingoCardListSection(
               selectedCardTypeIndex: _selectedCardTypeIndex,
               onSelectCardType: (int index) =>
