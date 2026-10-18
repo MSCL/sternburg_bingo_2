@@ -10,12 +10,10 @@ Future<void> main() async {
   final AppDependencies dependencies = await AppInitializer.initialize();
 
   runApp(
-    TranslationProvider(
-      child: ProviderScope(
-        observers: <ProviderObserver>[RiverpodObserver(dependencies.logger)],
-        overrides: dependencies.toProviderOverrides(),
-        child: const App(),
-      ),
+    ProviderScope(
+      observers: <ProviderObserver>[RiverpodObserver(dependencies.logger)],
+      overrides: dependencies.toProviderOverrides(),
+      child: TranslationProvider(child: const App()),
     ),
   );
 }

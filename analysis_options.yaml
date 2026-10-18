@@ -1,4 +1,10 @@
+plugins:
+  freezed_lint: ^0.1.0
+  riverpod_lint: ^3.1.9
+
 analyzer:
+  errors:
+    invalid_annotation_target: ignore
   exclude:
     - build/**
     - android/**
