@@ -58,7 +58,7 @@ final class _BingoScreenState extends ConsumerState<BingoScreen> {
     return AppScaffold(
       title: context.t.bingoTitle,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(appSpacingLg),
+        padding: appEdgeInsetsAllLg,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: appSpacingXl,

@@ -82,7 +82,7 @@ final class _BingoTileWidget extends ConsumerWidget {
 
     return AnimatedContainer(
       duration: appAnimationDuration,
-      padding: const EdgeInsets.all(appSpacingXs),
+      padding: appEdgeInsetsAllXs,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: appBorderRadiusMd,

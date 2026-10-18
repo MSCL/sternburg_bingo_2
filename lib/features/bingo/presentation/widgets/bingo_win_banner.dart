@@ -20,7 +20,7 @@ final class BingoWinBanner extends ConsumerWidget {
         borderRadius: appBorderRadiusLg,
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(appSpacingLg),
+          padding: appEdgeInsetsAllLg,
           decoration: BoxDecoration(
             color: theme.colorScheme.primary,
             borderRadius: appBorderRadiusLg,

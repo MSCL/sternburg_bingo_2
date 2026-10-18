@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../../core/i18n/strings.g.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../domain/bingo_game_state.dart';
 import '../bingo_constants.dart';
 import '../bingo_provider.dart';
@@ -55,17 +56,14 @@ final class BingoCollectedNumbersSection extends ConsumerWidget {
           ],
         ),
         if (sortedEntries.isEmpty)
-          Card(
+          AppCard(
             color: theme.colorScheme.surfaceContainerLowest,
-            child: Padding(
-              padding: const EdgeInsets.all(appSpacingLg),
-              child: Text(
-                context.t.bingoCollectedEmpty,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-                textAlign: TextAlign.center,
+            child: Text(
+              context.t.bingoCollectedEmpty,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
               ),
+              textAlign: TextAlign.center,
             ),
           )
         else
@@ -112,10 +110,7 @@ final class _CollectedChip extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: appSpacingSm,
-        vertical: appSpacingXs,
-      ),
+      padding: appEdgeInsetsSmXs,
       decoration: BoxDecoration(
         color: theme.colorScheme.secondaryContainer,
         borderRadius: appBorderRadiusXl,
@@ -132,10 +127,7 @@ final class _CollectedChip extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: appSpacingXs,
-              vertical: appSpacingXxs,
-            ),
+            padding: appEdgeInsetsXsXxs,
             decoration: BoxDecoration(
               color: theme.colorScheme.primary,
               borderRadius: appBorderRadiusMd,

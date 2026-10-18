@@ -20,6 +20,27 @@ final BorderRadius appBorderRadiusLg = BorderRadius.circular(appSpacingLg);
 final BorderRadius appBorderRadiusXl = BorderRadius.circular(appSpacingXl);
 final BorderRadius appBorderRadiusXxl = BorderRadius.circular(appSpacingXxl);
 
+const EdgeInsets appEdgeInsetsAllXxs = EdgeInsets.all(appSpacingXxs);
+const EdgeInsets appEdgeInsetsAllXs = EdgeInsets.all(appSpacingXs);
+const EdgeInsets appEdgeInsetsAllSm = EdgeInsets.all(appSpacingSm);
+const EdgeInsets appEdgeInsetsAllMd = EdgeInsets.all(appSpacingMd);
+const EdgeInsets appEdgeInsetsAllLg = EdgeInsets.all(appSpacingLg);
+const EdgeInsets appEdgeInsetsAllXl = EdgeInsets.all(appSpacingXl);
+const EdgeInsets appEdgeInsetsAllXxl = EdgeInsets.all(appSpacingXxl);
+
+const EdgeInsets appEdgeInsetsSmXs = EdgeInsets.symmetric(
+  horizontal: appSpacingSm,
+  vertical: appSpacingXs,
+);
+const EdgeInsets appEdgeInsetsXsXxs = EdgeInsets.symmetric(
+  horizontal: appSpacingXs,
+  vertical: appSpacingXxs,
+);
+const EdgeInsets appEdgeInsetsLgSm = EdgeInsets.symmetric(
+  horizontal: appSpacingLg,
+  vertical: appSpacingSm,
+);
+
 ThemeData _buildTheme(Brightness brightness) {
   final ColorScheme colorScheme = ColorScheme.fromSeed(
     seedColor: const Color(0xFFE30613),

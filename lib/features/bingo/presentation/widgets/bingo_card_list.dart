@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../../core/i18n/strings.g.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../../data/bingo_repository.dart';
 import '../../domain/bingo_card.dart';
 import '../../domain/bingo_game_state.dart';
@@ -27,37 +28,34 @@ final class BingoCardListSection extends ConsumerWidget {
         .watch(bingoRepositoryProvider)
         .getAvailableCardTypes();
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(appSpacingLg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: appSpacingMd,
-          children: <Widget>[
-            Text(
-              context.t.bingoCardTypesTitle,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: appSpacingMd,
+        children: <Widget>[
+          Text(
+            context.t.bingoCardTypesTitle,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            Column(
-              spacing: appSpacingSm,
-              children: List<Widget>.generate(availableCardTypes.length, (
-                int index,
-              ) {
-                final BingoCard card = availableCardTypes[index];
-                final bool isSelected = selectedCardTypeIndex == index;
+          ),
+          Column(
+            spacing: appSpacingSm,
+            children: List<Widget>.generate(availableCardTypes.length, (
+              int index,
+            ) {
+              final BingoCard card = availableCardTypes[index];
+              final bool isSelected = selectedCardTypeIndex == index;
 
-                return _CardTypeTile(
-                  card: card,
-                  index: index,
-                  isSelected: isSelected,
-                  onSelect: () => onSelectCardType(index),
-                );
-              }),
-            ),
-          ],
-        ),
+              return _CardTypeTile(
+                card: card,
+                index: index,
+                isSelected: isSelected,
+                onSelect: () => onSelectCardType(index),
+              );
+            }),
+          ),
+        ],
       ),
     );
   }
@@ -95,10 +93,7 @@ final class _CardTypeTile extends ConsumerWidget {
         borderRadius: appBorderRadiusLg,
         onTap: onSelect,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: appSpacingLg,
-            vertical: appSpacingSm,
-          ),
+          padding: appEdgeInsetsLgSm,
           child: Row(
             children: <Widget>[
               Icon(
@@ -168,10 +163,7 @@ final class _QuantityCounter extends StatelessWidget {
           onPressed: onDecrement,
         ),
         Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: appSpacingSm,
-            vertical: appSpacingXs,
-          ),
+          padding: appEdgeInsetsSmXs,
           decoration: BoxDecoration(
             color: isSelected
                 ? theme.colorScheme.primary

@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../../core/i18n/strings.g.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/widgets/app_card.dart';
 import '../bingo_constants.dart';
 import '../bingo_provider.dart';
 
@@ -51,49 +52,46 @@ final class _BingoNumberInputCardState
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(appSpacingLg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: appSpacingMd,
-          children: <Widget>[
-            Text(
-              context.t.bingoInputTitle,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+    return AppCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        spacing: appSpacingMd,
+        children: <Widget>[
+          Text(
+            context.t.bingoInputTitle,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: appSpacingMd,
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    focusNode: _focusNode,
-                    keyboardType: TextInputType.number,
-                    maxLength: bingoNumberPadLength,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    decoration: InputDecoration(
-                      hintText: context.t.bingoInputHint,
-                      errorText: _errorMessage,
-                      counterText: '',
-                    ),
-                    onSubmitted: (_) => _submitNumber(),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: appSpacingMd,
+            children: <Widget>[
+              Expanded(
+                child: TextField(
+                  controller: _controller,
+                  focusNode: _focusNode,
+                  keyboardType: TextInputType.number,
+                  maxLength: bingoNumberPadLength,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  decoration: InputDecoration(
+                    hintText: context.t.bingoInputHint,
+                    errorText: _errorMessage,
+                    counterText: '',
                   ),
+                  onSubmitted: (_) => _submitNumber(),
                 ),
-                FilledButton.icon(
-                  onPressed: _submitNumber,
-                  icon: const Icon(Icons.add),
-                  label: Text(context.t.bingoAdd),
-                ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              FilledButton.icon(
+                onPressed: _submitNumber,
+                icon: const Icon(Icons.add),
+                label: Text(context.t.bingoAdd),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
