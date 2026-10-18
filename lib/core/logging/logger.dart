@@ -15,8 +15,7 @@ final class ConsoleLogger implements Logger {
   const new();
 
   @override
-  void info(String message, {String? tag}) =>
-      log(message, name: tag ?? 'INFO', stackTrace: StackTrace.current);
+  void info(String message, {String? tag}) => log(message, name: tag ?? 'INFO');
 
   @override
   void error(

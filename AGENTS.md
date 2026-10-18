@@ -7,6 +7,7 @@ Always follow these rules when generating or refactoring Dart/Flutter code in th
 - never use `dynamic`, always use `Object?` instead
 - if possible use `await` and not `.then` notation
 - if possible to `return` a future, do it instead of marking the function `async` and `await`
+- no hard coded string in the UI code, always use i18n
 
 ## 1. Closure / Tear-off Simplification
 

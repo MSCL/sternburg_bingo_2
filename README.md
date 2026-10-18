@@ -45,3 +45,9 @@ flutter run --args="-noFIRAnalyticsDebugEnabled"
 
 ~/Library/Android/sdk/platform-tools/adb shell am start -a android.intent.action.VIEW -c
 android.intent.category.BROWSABLE -d "sternbingo:///settings" -> deep link showcase
+
+Later give an option to add own game garts - maybe not
+
+Proper approach for date time handling and formatting
+
+Accessibility not paid attention too

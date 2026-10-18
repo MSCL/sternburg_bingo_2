@@ -18,8 +18,8 @@ final class App extends ConsumerWidget {
     child: MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: context.t.appName,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: appLightTheme,
+      darkTheme: appDarkTheme,
       themeMode: ref.watch(themeModeProvider),
       locale: TranslationProvider.of(context).flutterLocale,
       supportedLocales: AppLocaleUtils.supportedLocales,
