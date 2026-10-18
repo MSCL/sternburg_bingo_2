@@ -4,7 +4,7 @@ import '../theme/app_theme.dart';
 
 /// A reusable card component with standard app padding and theme styling.
 final class AppCard extends StatelessWidget {
-  const AppCard({
+  const new({
     required this.child,
     super.key,
     this.color,

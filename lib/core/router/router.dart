@@ -16,20 +16,29 @@ final class Router extends RootStackRouter {
       page: DashboardRoute.page,
       path: '/',
       children: <AutoRoute>[
-        AutoRoute(page: BingoRoute.page, path: 'bingo', initial: true),
+        // way on how to deal with in tab dialogs
+        AutoRoute(
+          page: const EmptyShellRoute('BingoRoute'),
+          children: <AutoRoute>[
+            AutoRoute(page: BingoRoute.page, path: ''),
+            CustomRoute<void>(
+              page: BingoWinDialogRoute.page,
+              path: 'winDialog',
+              customRouteBuilder:
+                  <T>(
+                    BuildContext context,
+                    Widget child,
+                    AutoRoutePage<T> page,
+                  ) => DialogRoute<T>(
+                    context: context,
+                    settings: page,
+                    builder: (_) => child,
+                  ),
+            ),
+          ],
+        ),
         AutoRoute(page: SettingsRoute.page, path: 'settings'),
       ],
-    ),
-    CustomRoute<void>(
-      page: BingoWinDialogRoute.page,
-      path: '/bingo/winDialog',
-      customRouteBuilder:
-          <T>(BuildContext context, Widget child, AutoRoutePage<T> page) =>
-              DialogRoute<T>(
-                context: context,
-                settings: page,
-                builder: (_) => child,
-              ),
     ),
   ];
 }
