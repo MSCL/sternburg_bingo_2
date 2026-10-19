@@ -249,7 +249,7 @@ dart run build_runner build
 The following items are planned for future development iterations:
 
 - [ ] **Import Numbers via Camera**: Use camera OCR / ML Kit to automatically scan and import drawn
-  bingo numbers.
+  bingo numbers (see [Camera Feature Blueprint](docs/camera_feature_blueprint.md)).
 - [ ] **User Profile & Authentication**: Implement user accounts (e.g. via Firebase Auth) to unlock
   social features:
     - **Connect with Friends**: Pair with friends to collaborate on bingo progress.
