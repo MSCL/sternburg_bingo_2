@@ -251,7 +251,7 @@ The following items are planned for future development iterations:
 - [ ] **Import Numbers via Camera**: Use camera OCR / ML Kit to automatically scan and import drawn
   bingo numbers (see [Camera Feature Blueprint](docs/camera_feature_blueprint.md)).
 - [ ] **User Profile & Authentication**: Implement user accounts (e.g. via Firebase Auth) to unlock
-  social features:
+  social features (see [Backend & Cloud Sync Blueprint](docs/backend_connection_blueprint.md)):
     - **Connect with Friends**: Pair with friends to collaborate on bingo progress.
     - **Cliques & Groups**: Form teams or groups to collect bingo fields together.
 - [x] **Audio & Haptic Feedback**: Add celebratory sound effects (`audioplayers`), vibration
@@ -278,8 +278,9 @@ The following items are planned for future development iterations:
   timezone conversions, ISO-8601 parsing, and localized formatting.
 - [ ] **Custom Bingo Card Creator**: Allow users to design, edit, and persist custom 5x5 bingo cards
   with custom terms or numbers.
-- [ ] **Backend Connection**: Connect to a REST / GraphQL / Firestore backend to support remote sync
-  and global leaderboards.
+- [ ] **Backend Connection**: Connect to Cloud Firestore & Firebase Auth for multi-device game sync
+  and cooperative cliques
+  (see [Backend & Cloud Sync Blueprint](docs/backend_connection_blueprint.md)).
 
 ---
 
