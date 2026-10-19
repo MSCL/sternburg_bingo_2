@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import '../logging/logger.dart';
 import 'push_notification_service.dart';
 
 /// No notifications are shown when the app is in the foreground when
 /// receiving them. Android devices without Google Play Services are not
 /// supported (e.g. Huawei).
 final class FirebasePushNotificationService implements PushNotificationService {
-  new(FirebaseApp _, Logger _) : _messaging = FirebaseMessaging.instance;
+  new(FirebaseApp _) : _messaging = FirebaseMessaging.instance;
 
   final FirebaseMessaging _messaging;
 

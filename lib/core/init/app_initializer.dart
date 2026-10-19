@@ -209,7 +209,7 @@ _initFirebaseGroup({
   return (
     analyticsService ?? FirebaseAnalyticsService(app),
     featureFlagService ?? await _initFeatureFlagService(app, logger),
-    pushNotificationService ?? FirebasePushNotificationService(app, logger),
+    pushNotificationService ?? FirebasePushNotificationService(app),
   );
 }
 
