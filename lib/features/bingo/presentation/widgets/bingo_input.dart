@@ -82,6 +82,7 @@ final class _BingoNumberInputCardState
                     counterText: '',
                   ),
                   onSubmitted: (_) => _submitNumber(),
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
                 ),
               ),
               FilledButton.icon(
