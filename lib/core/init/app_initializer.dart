@@ -1,9 +1,7 @@
-// Static initialization facade class.
-// ignore_for_file: avoid_classes_with_only_static_members
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,9 +9,17 @@ import '../../firebase_options.dart';
 import '../analytics/analytics_provider.dart';
 import '../analytics/analytics_service.dart';
 import '../analytics/firebase_analytics_service.dart';
+import '../audio/audio_provider.dart';
+import '../audio/audio_service.dart';
+import '../audio/audioplayers_audio_service.dart';
+import '../confetti/confetti_provider.dart';
+import '../confetti/confetti_service.dart';
+import '../confetti/flutter_confetti_service.dart';
 import '../feature_flags/feature_flag_provider.dart';
 import '../feature_flags/feature_flag_service.dart';
 import '../feature_flags/firebase_feature_flag_service.dart';
+import '../haptics/haptic_provider.dart';
+import '../haptics/haptic_service.dart';
 import '../i18n/strings.g.dart';
 import '../info/app_info.dart';
 import '../info/package_info_provider.dart';
@@ -41,6 +47,9 @@ final class AppDependencies {
     required this.splashService,
     required this.appInfo,
     required this.appSettingsService,
+    required this.audioService,
+    required this.hapticService,
+    required this.confettiService,
   });
 
   final Logger logger;
@@ -51,6 +60,9 @@ final class AppDependencies {
   final SplashService splashService;
   final AppInfo appInfo;
   final AppSettingsService appSettingsService;
+  final AudioService audioService;
+  final HapticService hapticService;
+  final ConfettiService confettiService;
 
   List<Override> toProviderOverrides() => <Override>[
     loggerProvider.overrideWithValue(logger),
@@ -61,136 +73,154 @@ final class AppDependencies {
     splashServiceProvider.overrideWithValue(splashService),
     appInfoProvider.overrideWithValue(appInfo),
     appSettingsServiceProvider.overrideWithValue(appSettingsService),
+    audioServiceProvider.overrideWith((Ref ref) {
+      ref.onDispose(audioService.dispose);
+      return audioService;
+    }),
+    hapticServiceProvider.overrideWithValue(hapticService),
+    confettiServiceProvider.overrideWithValue(confettiService),
   ];
 }
 
-abstract final class AppInitializer {
-  /// Initializes application services.
-  ///
-  /// Synchronous dependencies ([splashService], [logger], [appSettingsService])
-  /// have non-nullable default values. Asynchronous services ([localStorage],
-  /// [analyticsService], [featureFlagService], [pushNotificationService],
-  /// [appInfo]) are initialized automatically if omitted.
-  static Future<AppDependencies> initialize({
-    SplashService splashService = const FlutterNativeSplashService(),
-    Logger logger = kDebugMode ? const ConsoleLogger() : const SentryLogger(),
-    AppSettingsService appSettingsService = const AppSettingsServiceImpl(),
-    LocalStorage? localStorage,
-    AnalyticsService? analyticsService,
-    FeatureFlagService? featureFlagService,
-    PushNotificationService? pushNotificationService,
-    AppInfo? appInfo,
-  }) async {
-    final WidgetsBinding widgetsBinding =
-        WidgetsFlutterBinding.ensureInitialized();
-    splashService.preserve(widgetsBinding: widgetsBinding);
+/// Initializes application services.
+///
+/// Synchronous dependencies ([splashService], [logger], [appSettingsService],
+/// [hapticService], [confettiService]) have default values. Asynchronous
+/// services ([localStorage], [analyticsService], [featureFlagService],
+/// [pushNotificationService], [appInfo], [audioService]) are initialized
+/// automatically if omitted.
+Future<AppDependencies> initialize({
+  SplashService splashService = const FlutterNativeSplashService(),
+  Logger logger = kDebugMode ? const ConsoleLogger() : const SentryLogger(),
+  AppSettingsService appSettingsService = const AppSettingsServiceImpl(),
+  LocalStorage? localStorage,
+  AnalyticsService? analyticsService,
+  FeatureFlagService? featureFlagService,
+  PushNotificationService? pushNotificationService,
+  AppInfo? appInfo,
+  AudioService? audioService,
+  HapticService hapticService = const SystemHapticService(),
+  ConfettiService confettiService = const FlutterConfettiService(),
+}) async {
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
+  splashService.preserve(widgetsBinding: widgetsBinding);
 
-    _setupErrorHandling(logger);
+  _setupErrorHandling(logger);
 
-    final (
-      LocalStorage resolvedLocalStorage,
-      AppInfo resolvedAppInfo,
-      _,
-      (
-        AnalyticsService resolvedAnalytics,
-        FeatureFlagService resolvedFeatureFlags,
-        PushNotificationService resolvedPushNotifications,
-      ),
-    ) = await (
-      localStorage != null
-          ? Future<LocalStorage>.value(localStorage)
-          : _initLocalStorage(),
-      appInfo != null ? Future<AppInfo>.value(appInfo) : _initAppInfo(),
-      LocaleSettings.useDeviceLocale(),
-      _initFirebaseGroup(
-        analyticsService: analyticsService,
-        featureFlagService: featureFlagService,
-        pushNotificationService: pushNotificationService,
-        logger: logger,
-      ),
-    ).wait;
-
-    return AppDependencies(
+  final (
+    LocalStorage resolvedLocalStorage,
+    AppInfo resolvedAppInfo,
+    AudioService resolvedAudio,
+    _,
+    (
+      AnalyticsService resolvedAnalytics,
+      FeatureFlagService resolvedFeatureFlags,
+      PushNotificationService resolvedPushNotifications,
+    ),
+  ) = await (
+    localStorage != null
+        ? Future<LocalStorage>.value(localStorage)
+        : _initLocalStorage(),
+    appInfo != null ? Future<AppInfo>.value(appInfo) : _initAppInfo(),
+    _initAudioService(audioService),
+    LocaleSettings.useDeviceLocale(),
+    _initFirebaseGroup(
+      analyticsService: analyticsService,
+      featureFlagService: featureFlagService,
+      pushNotificationService: pushNotificationService,
       logger: logger,
-      analyticsService: resolvedAnalytics,
-      featureFlagService: resolvedFeatureFlags,
-      pushNotificationService: resolvedPushNotifications,
-      localStorage: resolvedLocalStorage,
-      splashService: splashService,
-      appInfo: resolvedAppInfo,
-      appSettingsService: appSettingsService,
+    ),
+  ).wait;
+
+  return AppDependencies(
+    logger: logger,
+    analyticsService: resolvedAnalytics,
+    featureFlagService: resolvedFeatureFlags,
+    pushNotificationService: resolvedPushNotifications,
+    localStorage: resolvedLocalStorage,
+    splashService: splashService,
+    appInfo: resolvedAppInfo,
+    appSettingsService: appSettingsService,
+    audioService: resolvedAudio,
+    hapticService: hapticService,
+    confettiService: confettiService,
+  );
+}
+
+// Right now due to package version problems with package_info_plus,
+// we hardcode AppInfo, but we would like to use package_info_plus for this in
+// the future.
+Future<AppInfo> _initAppInfo() async =>
+    const AppInfo(appName: 'Sternbingo', version: '1.0.0', buildNumber: '1');
+
+Future<AudioService> _initAudioService(AudioService? audioService) async {
+  final AudioService service = audioService ?? AudioplayersAudioService();
+  await service.initialize();
+  return service;
+}
+
+void _setupErrorHandling(Logger logger) {
+  // disable when using SentryLogger
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    logger.error(
+      'Uncaught Flutter framework error: ${details.exceptionAsString()}',
+      error: details.exception,
+      stackTrace: details.stack,
+      tag: 'FlutterError',
     );
+  };
+
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    logger.error(
+      'Uncaught asynchronous error',
+      error: error,
+      stackTrace: stack,
+      tag: 'PlatformError',
+    );
+    return true;
+  };
+}
+
+Future<LocalStorage> _initLocalStorage() async => SharedPreferencesLocalStorage(
+  await SharedPreferencesWithCache.create(
+    cacheOptions: const SharedPreferencesWithCacheOptions(),
+  ),
+);
+
+Future<(AnalyticsService, FeatureFlagService, PushNotificationService)>
+_initFirebaseGroup({
+  required AnalyticsService? analyticsService,
+  required FeatureFlagService? featureFlagService,
+  required PushNotificationService? pushNotificationService,
+  required Logger logger,
+}) async {
+  if (analyticsService != null &&
+      featureFlagService != null &&
+      pushNotificationService != null) {
+    return (analyticsService, featureFlagService, pushNotificationService);
   }
 
-  // Right now due to package version problems with package_info_plus,
-  // we hardcode AppInfo, but we would like to use package_info_plus for this in
-  // the future.
-  static Future<AppInfo> _initAppInfo() async =>
-      const AppInfo(appName: 'Sternbingo', version: '1.0.0', buildNumber: '1');
+  final FirebaseApp app = await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  static void _setupErrorHandling(Logger logger) {
-    // disable when using SentryLogger
-    FlutterError.onError = (FlutterErrorDetails details) {
-      FlutterError.presentError(details);
-      logger.error(
-        'Uncaught Flutter framework error: ${details.exceptionAsString()}',
-        error: details.exception,
-        stackTrace: details.stack,
-        tag: 'FlutterError',
-      );
-    };
+  return (
+    analyticsService ?? FirebaseAnalyticsService(app),
+    featureFlagService ?? await _initFeatureFlagService(app, logger),
+    pushNotificationService ?? FirebasePushNotificationService(app, logger),
+  );
+}
 
-    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-      logger.error(
-        'Uncaught asynchronous error',
-        error: error,
-        stackTrace: stack,
-        tag: 'PlatformError',
-      );
-      return true;
-    };
-  }
-
-  static Future<LocalStorage> _initLocalStorage() async =>
-      SharedPreferencesLocalStorage(
-        await SharedPreferencesWithCache.create(
-          cacheOptions: const SharedPreferencesWithCacheOptions(),
-        ),
-      );
-
-  static Future<(AnalyticsService, FeatureFlagService, PushNotificationService)>
-  _initFirebaseGroup({
-    required AnalyticsService? analyticsService,
-    required FeatureFlagService? featureFlagService,
-    required PushNotificationService? pushNotificationService,
-    required Logger logger,
-  }) async {
-    if (analyticsService != null &&
-        featureFlagService != null &&
-        pushNotificationService != null) {
-      return (analyticsService, featureFlagService, pushNotificationService);
-    }
-
-    final FirebaseApp app = await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-
-    return (
-      analyticsService ?? FirebaseAnalyticsService(app),
-      featureFlagService ?? await _initFeatureFlagService(app, logger),
-      pushNotificationService ?? FirebasePushNotificationService(app, logger),
-    );
-  }
-
-  static Future<FeatureFlagService> _initFeatureFlagService(
-    FirebaseApp app,
-    Logger logger,
-  ) async {
-    final FeatureFlagService featureFlagService = FirebaseFeatureFlagService(
-      app,
-      logger,
-    );
-    await featureFlagService.initialize();
-    return featureFlagService;
-  }
+Future<FeatureFlagService> _initFeatureFlagService(
+  FirebaseApp app,
+  Logger logger,
+) async {
+  final FeatureFlagService featureFlagService = FirebaseFeatureFlagService(
+    app,
+    logger,
+  );
+  await featureFlagService.initialize();
+  return featureFlagService;
 }

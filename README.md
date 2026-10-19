@@ -156,8 +156,8 @@ lib/
 - Abstract `Logger` interface isolating log outputs.
 - **`ConsoleLogger`**: Active in `kDebugMode` for clean developer console output.
 - **`SentryLogger`**: Architecture-ready production logger facade for error reporting, breadcrumb
-  tracking, and stack trace capturing *(Note: Sentry is currently not set up / not configured with a
-  live DSN)*.
+  tracking, and stack trace capturing *(Note: 3rd party logging/monitoring services are prepared at
+  the architecture level, but live production DSN endpoints are currently not configured)*.
 
 ### 7. 🚀 Native Splash Screen & App Icon
 
@@ -182,10 +182,14 @@ lib/
 
 - Centralized asynchronous startup in `AppInitializer`.
 - Abstract contracts for all infrastructure services (`Logger`, `AnalyticsService`,
-  `FeatureFlagService`, `PushNotificationService`, `LocalStorage`, `AppSettingsService`).
+  `FeatureFlagService`, `PushNotificationService`, `LocalStorage`, `AppSettingsService`,
+  `AudioService`,
+  `HapticService`, `ConfettiService`).
 - Complete suite of in-memory test doubles (`FakeLogger`, `FakeAnalyticsService`,
-  `FakeLocalStorage`, etc.) enabling robust unit and widget testing without network/Firebase
-  dependencies.
+  `FakeLocalStorage`, `FakeAudioService`, `FakeHapticService`, `FakeConfettiService`, etc.) enabling
+  robust unit testing without network/Firebase dependencies.
+- **Unit Test Suite**: Fast unit tests covering domain models, Riverpod state notifiers, JSON
+  serialization, and service contracts.
 
 ### 11. 🔔 Push Notifications Integration
 
@@ -199,6 +203,15 @@ lib/
   **Settings**.
 - Settings screen featuring theme selection, OS language link, notification permissions, analytics
   toggle, and interactive About dialog.
+
+### 13. 🔊 Audio, Haptic & Confetti Victory Effects
+
+- **`AudioService`**: Abstract contract backed by `AudioplayersAudioService` playing victory sound
+  effects (`assets/audio/bingo_win.wav`).
+- **`HapticService`**: Abstract contract backed by `SystemHapticService` triggering native OS haptic
+  feedback (`HapticFeedback.heavyImpact()`).
+- **`Confetti`**: Festive confetti particle explosion rendered on screen via `flutter_confetti` when
+  the victory dialog appears.
 
 ---
 
@@ -241,12 +254,19 @@ The following items are planned for future development iterations:
   social features:
     - **Connect with Friends**: Pair with friends to collaborate on bingo progress.
     - **Cliques & Groups**: Form teams or groups to collect bingo fields together.
-- [ ] **Audio & Haptic Feedback**: Add celebratory sound effects (`audioplayers`) and vibration
-  feedback (`vibration`) upon achieving a Bingo victory.
+- [x] **Audio & Haptic Feedback**: Add celebratory sound effects (`audioplayers`), vibration
+  feedback (`HapticFeedback`), and confetti (`flutter_confetti`) upon achieving a Bingo victory.
+- [ ] **Widget & Golden / Snapshot Testing**: Add widget tests and golden / snapshot test suites for
+  UI design system components and screen layouts.
+- [ ] **Integration Testing**: Add end-to-end integration tests (`integration_test`) covering
+  primary app workflows (e.g. game completion flow, deep linking, and settings interactions).
 - [ ] **Network UI & Error Handling**: Implement structured UI states (Loading / Error / Empty /
   Success) with retry mechanisms when connecting to a remote backend.
-- [ ] **Cached Network Images & WebP Support**: Introduce a unified image facade using
-  `cached_network_image` with WebP format support for remote asset fetching.
+- [ ] **Advanced Asset & Media Caching**: Implement an advanced asset caching and preloading facade
+  for audio, fonts, and remote images using `cached_network_image` with WebP support.
+- [ ] **Production Telemetry & 3rd Party Service Logs**: Configure live production DSNs and remote
+  logging endpoints for third-party monitoring services (`SentryLogger` error reporting facade is
+  architecture-ready but not yet configured with live DSN credentials).
 - [ ] **Remote Data Source Integration**: Add a `RemoteDataSource` layer alongside the existing
   `BingoRepository` and `BingoLocalDataSource`.
 - [ ] **Repository & Data Source Base Classes**: Define abstract base classes for repositories and

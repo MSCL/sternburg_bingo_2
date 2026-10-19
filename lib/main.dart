@@ -7,7 +7,7 @@ import 'core/init/app_initializer.dart';
 import 'core/provider/riverpod_observer.dart';
 
 Future<void> main() async {
-  final AppDependencies dependencies = await AppInitializer.initialize();
+  final AppDependencies dependencies = await initialize();
 
   runApp(
     ProviderScope(

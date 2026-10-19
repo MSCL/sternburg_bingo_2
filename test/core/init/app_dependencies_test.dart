@@ -2,7 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sternburg_bingo_2/core/analytics/analytics_provider.dart';
+import 'package:sternburg_bingo_2/core/audio/audio_provider.dart';
+import 'package:sternburg_bingo_2/core/confetti/confetti_provider.dart';
 import 'package:sternburg_bingo_2/core/feature_flags/feature_flag_provider.dart';
+import 'package:sternburg_bingo_2/core/haptics/haptic_provider.dart';
 import 'package:sternburg_bingo_2/core/info/app_info.dart';
 import 'package:sternburg_bingo_2/core/info/package_info_provider.dart';
 import 'package:sternburg_bingo_2/core/init/app_initializer.dart';
@@ -15,7 +18,10 @@ import 'package:sternburg_bingo_2/core/storage/local_storage.dart';
 
 import '../../fakes/fake_analytics_service.dart';
 import '../../fakes/fake_app_settings_service.dart';
+import '../../fakes/fake_audio_service.dart';
+import '../../fakes/fake_confetti_service.dart';
 import '../../fakes/fake_feature_flag_service.dart';
+import '../../fakes/fake_haptic_service.dart';
 import '../../fakes/fake_local_storage.dart';
 import '../../fakes/fake_logger.dart';
 import '../../fakes/fake_push_notification_service.dart';
@@ -50,6 +56,9 @@ void main() {
         );
         final FakeAppSettingsService appSettingsService =
             FakeAppSettingsService();
+        final FakeAudioService audioService = FakeAudioService();
+        final FakeHapticService hapticService = FakeHapticService();
+        final FakeConfettiService confettiService = FakeConfettiService();
 
         final AppDependencies dependencies = AppDependencies(
           logger: logger,
@@ -60,6 +69,9 @@ void main() {
           splashService: splashService,
           appInfo: appInfo,
           appSettingsService: appSettingsService,
+          audioService: audioService,
+          hapticService: hapticService,
+          confettiService: confettiService,
         );
 
         final ProviderContainer container = ProviderContainer(
@@ -78,6 +90,9 @@ void main() {
         expect(container.read(splashServiceProvider), splashService);
         expect(container.read(appInfoProvider), appInfo);
         expect(container.read(appSettingsServiceProvider), appSettingsService);
+        expect(container.read(audioServiceProvider), audioService);
+        expect(container.read(hapticServiceProvider), hapticService);
+        expect(container.read(confettiServiceProvider), confettiService);
       },
     );
   });

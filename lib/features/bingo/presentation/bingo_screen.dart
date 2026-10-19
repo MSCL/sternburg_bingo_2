@@ -4,6 +4,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../core/audio/audio_provider.dart';
+import '../../../core/confetti/confetti_provider.dart';
+import '../../../core/haptics/haptic_provider.dart';
 import '../../../core/i18n/strings.g.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../core/theme/app_theme.dart';
@@ -28,9 +31,15 @@ final class _BingoScreenState extends ConsumerState<BingoScreen> {
   int _selectedCardTypeIndex = 0;
   bool _isWinDialogShowing = false;
 
-  Future<void> _showWinDialog() async {
+  Future<void> _showWinDialog({bool isAutomatic = false}) async {
     if (_isWinDialogShowing || !mounted) {
       return;
+    }
+
+    if (isAutomatic) {
+      unawaited(ref.read(audioServiceProvider).playWinSound());
+      unawaited(ref.read(hapticServiceProvider).heavyImpact());
+      ref.read(confettiServiceProvider).launch(context);
     }
 
     _isWinDialogShowing = true;
@@ -45,7 +54,7 @@ final class _BingoScreenState extends ConsumerState<BingoScreen> {
       (bool? previous, bool next) {
         if ((previous == null || !previous) && next) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            unawaited(_showWinDialog());
+            unawaited(_showWinDialog(isAutomatic: true));
           });
         }
       },
