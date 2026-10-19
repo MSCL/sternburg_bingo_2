@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../../core/feature_flags/feature_flag.dart';
+import '../../../../core/feature_flags/feature_flag_provider.dart';
 import '../../../../core/i18n/strings.g.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../data/bingo_repository.dart';
@@ -67,17 +69,24 @@ final class _BingoTileWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeData theme = Theme.of(context);
+    final bool isNewLayout = FeatureFlag.enableNewBingoLayout.isEnabled(ref);
     final bool isChecked = ref.watch(
       bingoProvider.select(
         (BingoGameState state) => (state.collectedNumbers[number] ?? 0) > 0,
       ),
     );
 
+    final Color checkedColor = isNewLayout
+        ? theme.colorScheme.tertiary
+        : theme.colorScheme.primary;
+
     final Color backgroundColor = isChecked
-        ? theme.colorScheme.primary
+        ? checkedColor
         : theme.colorScheme.surfaceContainerHighest;
     final Color textColor = isChecked
-        ? theme.colorScheme.onPrimary
+        ? (isNewLayout
+              ? theme.colorScheme.onTertiary
+              : theme.colorScheme.onPrimary)
         : theme.colorScheme.onSurface;
 
     return AnimatedContainer(
@@ -85,11 +94,9 @@ final class _BingoTileWidget extends ConsumerWidget {
       padding: appEdgeInsetsAllXs,
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: appBorderRadiusMd,
+        borderRadius: isNewLayout ? appBorderRadiusLg : appBorderRadiusMd,
         border: Border.all(
-          color: isChecked
-              ? theme.colorScheme.primaryContainer
-              : theme.colorScheme.outlineVariant,
+          color: isChecked ? backgroundColor : theme.colorScheme.outlineVariant,
           width: appBorderWidth,
         ),
       ),
